@@ -8,7 +8,6 @@ services:
     runtime: node
     buildCommand: npm install
     startCommand: npm start
-    healthCheckPath: /api/health
     autoDeploy: true
     
     # Environment Variables (Configure in Render Dashboard)
