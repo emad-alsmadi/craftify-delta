@@ -49,6 +49,24 @@ export type OrderStatus =
   | 'delivered'
   | 'canceled';
 
+export type PaymentStatus =
+  | 'unpaid'
+  | 'pending'
+  | 'paid'
+  | 'failed'
+  | 'refunded';
+
+export interface SubscriptionRecord {
+  _id: string;
+  user: string;
+  stripeSubscriptionId: string;
+  stripePriceId: string;
+  status: string;
+  currentPeriodEnd?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface OrderItem {
   templateId: string;
   title: string;
@@ -72,6 +90,10 @@ export interface Order {
   items: OrderItem[];
   shippingAddress: ShippingAddress;
   status: OrderStatus;
+  paymentStatus?: PaymentStatus;
+  stripeSessionId?: string;
+  paymentIntentId?: string;
+  paidAt?: string;
   itemsPrice: number;
   shippingPrice: number;
   taxPrice: number;

@@ -2,15 +2,38 @@
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { User, ShieldCheck, LogOut, KeyRound, Pencil } from 'lucide-react';
+import {
+  User,
+  ShieldCheck,
+  LogOut,
+  KeyRound,
+  Pencil,
+  Sparkles,
+  Loader2,
+  ExternalLink,
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useLogout, useMe } from '@/lib/authQuery';
+import { useToast } from '@/components/ui/Toast';
+import {
+  useBillingPortalMutation,
+  useSubscription,
+} from '@/lib/subscriptionQuery';
+import {
+  getUserFacingErrorMessage,
+  logErrorForDev,
+} from '@/lib/userFacingError';
+import { useConfirm } from '@/components/confirm/ConfirmProvider';
 
 export default function ProfilePage() {
   const router = useRouter();
+  const { toast } = useToast();
   const meQuery = useMe();
   const logout = useLogout();
+  const confirm = useConfirm();
   const user = meQuery.data?.user || null;
+  const sub = useSubscription();
+  const portal = useBillingPortalMutation();
 
   if (meQuery.isLoading) return null;
   if (!user) return null;
@@ -89,6 +112,78 @@ export default function ProfilePage() {
             </div>
           </div>
 
+          <div className='mt-8 rounded-3xl border border-white/30 bg-white/30 p-6 sm:col-span-2'>
+            <div className='flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-indigo-950/70'>
+              <Sparkles className='h-4 w-4 text-fuchsia-700' />
+              Subscription
+            </div>
+            {sub.isLoading ? (
+              <div className='mt-4 flex items-center gap-2 text-sm font-semibold text-indigo-950/80'>
+                <Loader2 className='h-4 w-4 animate-spin text-fuchsia-600' />
+                Loading…
+              </div>
+            ) : sub.data ? (
+              <div className='mt-4 space-y-2'>
+                <div className='text-sm font-extrabold text-indigo-950'>
+                  Status:{' '}
+                  <span className='capitalize'>{sub.data.status}</span>
+                </div>
+                {sub.data.currentPeriodEnd ? (
+                  <div className='text-xs font-semibold text-indigo-950/75'>
+                    Current period ends{' '}
+                    {new Date(sub.data.currentPeriodEnd).toLocaleString()}
+                  </div>
+                ) : null}
+                <Button
+                  size='lg'
+                  disabled={portal.isPending}
+                  onClick={async () => {
+                    try {
+                      const { url } = await portal.mutateAsync();
+                      if (url) window.location.assign(url);
+                    } catch (err) {
+                      logErrorForDev(err);
+                      toast(
+                        getUserFacingErrorMessage(
+                          err,
+                          'Billing portal unavailable',
+                        ),
+                        {
+                          title: 'Billing',
+                          variant: 'error',
+                        },
+                      );
+                    }
+                  }}
+                  className='mt-2 w-full rounded-full border border-white/35 bg-white/45 text-indigo-950 shadow-sm backdrop-blur-xl transition hover:bg-white/65 sm:w-auto'
+                >
+                  {portal.isPending ? (
+                    <span className='inline-flex items-center gap-2'>
+                      <Loader2 className='h-4 w-4 animate-spin' />
+                      Opening…
+                    </span>
+                  ) : (
+                    <span className='inline-flex items-center gap-2'>
+                      <ExternalLink className='h-4 w-4' />
+                      Manage billing
+                    </span>
+                  )}
+                </Button>
+              </div>
+            ) : (
+              <p className='mt-4 text-sm font-semibold text-indigo-950/80'>
+                No active subscription.{' '}
+                <button
+                  type='button'
+                  onClick={() => router.push('/pricing')}
+                  className='font-extrabold text-indigo-700 underline'
+                >
+                  View Craftify Pro
+                </button>
+              </p>
+            )}
+          </div>
+
           <div className='mt-6 grid gap-3 sm:grid-cols-3'>
             <Button
               className='w-full rounded-full border border-white/35 bg-white/45 text-indigo-950 shadow-sm backdrop-blur-xl transition hover:bg-white/65'
@@ -111,10 +206,21 @@ export default function ProfilePage() {
             <Button
               className='w-full rounded-full bg-gradient-to-r from-rose-600 via-fuchsia-600 to-amber-500 text-white shadow-md transition hover:brightness-110 active:brightness-95'
               size='lg'
-              onClick={() => {
-                logout();
-                router.push('/');
-              }}
+              onClick={() =>
+                void confirm({
+                  variant: 'danger',
+                  title: 'Log out?',
+                  description:
+                    'You will need to sign in again to access your account.',
+                  confirmLabel: 'Log out',
+                  cancelLabel: 'Stay signed in',
+                  closeOnBackdrop: false,
+                  onConfirm: async () => {
+                    await logout();
+                    router.push('/');
+                  },
+                })
+              }
             >
               <span className='inline-flex items-center gap-2'>
                 <LogOut className='h-4 w-4' />

@@ -12,6 +12,7 @@ export function proxy(request: NextRequest) {
     { path: '/admin', role: 'admin' },
     { path: '/orders', role: ['user', 'admin', 'moderator'] },
     { path: '/cart', role: ['user', 'admin', 'moderator'] },
+    { path: '/checkout', role: ['user', 'admin', 'moderator'] },
   ];
 
   const protectedPath = protectedPaths.find((p) => path.startsWith(p.path));

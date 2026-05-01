@@ -6,6 +6,7 @@ import {
   CreatorsResponse,
   CreatorsQuery,
   Order,
+  SubscriptionRecord,
 } from '@/types';
 import { getAuthToken } from '@/lib/authCookies';
 
@@ -129,20 +130,22 @@ export const passwordApi = {
   },
 };
 
+export type OrderCheckoutPayload = {
+  items: { templateId: string; qty: number }[];
+  shippingAddress: {
+    name: string;
+    phone: string;
+    address: string;
+    city: string;
+    zip: string;
+    notes?: string;
+  };
+  shippingPrice?: number;
+  taxPrice?: number;
+};
+
 export const ordersApi = {
-  createOrder: async (payload: {
-    items: { templateId: string; qty: number }[];
-    shippingAddress: {
-      name: string;
-      phone: string;
-      address: string;
-      city: string;
-      zip: string;
-      notes?: string;
-    };
-    shippingPrice?: number;
-    taxPrice?: number;
-  }): Promise<Order> => {
+  createOrder: async (payload: OrderCheckoutPayload): Promise<Order> => {
     const { data } = await api.post('/orders', payload);
     return data;
   },
@@ -152,6 +155,44 @@ export const ordersApi = {
   },
   getOrderById: async (id: string): Promise<Order> => {
     const { data } = await api.get(`/orders/${id}`);
+    return data;
+  },
+};
+
+export const paymentsApi = {
+  getSetupStatus: async (): Promise<{ ready: boolean }> => {
+    const { data } = await api.get('/payments/setup-status');
+    return data;
+  },
+  createCheckoutSession: async (
+    payload: OrderCheckoutPayload,
+  ): Promise<{ url: string; orderId: string; sessionId: string }> => {
+    const { data } = await api.post('/payments/checkout-session', payload);
+    return data;
+  },
+};
+
+export type SubscriptionSetupStatus = {
+  ready: boolean;
+  stripeSecretConfigured: boolean;
+  subscriptionPriceConfigured: boolean;
+};
+
+export const subscriptionsApi = {
+  getSetupStatus: async (): Promise<SubscriptionSetupStatus> => {
+    const { data } = await api.get('/subscriptions/setup-status');
+    return data;
+  },
+  createCheckoutSession: async (): Promise<{ url: string }> => {
+    const { data } = await api.post('/subscriptions/checkout-session');
+    return data;
+  },
+  createPortalSession: async (): Promise<{ url: string }> => {
+    const { data } = await api.post('/subscriptions/portal');
+    return data;
+  },
+  getMine: async (): Promise<SubscriptionRecord | null> => {
+    const { data } = await api.get('/subscriptions/me');
     return data;
   },
 };

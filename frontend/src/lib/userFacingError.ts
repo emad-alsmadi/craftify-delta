@@ -26,9 +26,9 @@ export function getUserFacingErrorMessage(
 
   if (axios.isAxiosError(error)) {
     const status = error.response?.status;
+    const data = error.response?.data;
 
     const apiMessage = (() => {
-      const data = error.response?.data;
       if (typeof data === 'string') return data;
       if (isRecord(data) && typeof data.message === 'string')
         return data.message;
@@ -44,6 +44,11 @@ export function getUserFacingErrorMessage(
     if (status === 403) return 'You do not have permission to do that.';
     if (status === 404) return 'We could not find what you requested.';
     if (typeof status === 'number' && status >= 500) {
+      const serverMsg =
+        isRecord(data) && typeof data.message === 'string'
+          ? sanitizeMessage(data.message)
+          : '';
+      if (serverMsg) return serverMsg;
       return 'Something went wrong on our side. Please try again later.';
     }
 
@@ -56,5 +61,13 @@ export function getUserFacingErrorMessage(
 }
 
 export function logErrorForDev(error: unknown) {
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data;
+    console.error(error);
+    if (isRecord(data) && typeof data.detail === 'string' && data.detail) {
+      console.error('[API detail]', data.detail);
+    }
+    return;
+  }
   console.error(error);
 }

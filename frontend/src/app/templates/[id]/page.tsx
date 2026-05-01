@@ -18,6 +18,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useTemplateById } from '@/lib/templatesQuery';
 import { useCart } from '@/lib/cartStore';
+import { normalizeRemoteImageSrc, remoteCoverLoader } from '@/lib/utils';
 
 export default function TemplateDetailPage() {
   const params = useParams();
@@ -75,7 +76,7 @@ export default function TemplateDetailPage() {
       templateId: template._id,
       title: template.title,
       price: template.price,
-      cover: template.cover,
+      cover: normalizeRemoteImageSrc(template.cover),
       qty: 1,
     });
     toast('Added to cart.', {
@@ -120,7 +121,8 @@ export default function TemplateDetailPage() {
                 transition={{ type: 'spring', stiffness: 260, damping: 20 }}
               >
                 <Image
-                  src={template.cover}
+                  loader={remoteCoverLoader}
+                  src={normalizeRemoteImageSrc(template.cover)}
                   alt={template.title}
                   fill
                   className='object-cover'

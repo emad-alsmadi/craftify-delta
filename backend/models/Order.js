@@ -120,6 +120,24 @@ const OrderSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+    paymentStatus: {
+      type: String,
+      enum: ['unpaid', 'pending', 'paid', 'failed', 'refunded'],
+      default: 'paid',
+    },
+    stripeSessionId: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    paymentIntentId: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    paidAt: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );
@@ -131,11 +149,20 @@ const validateCreateOrder = (obj) => {
     items: Joi.array()
       .items(
         Joi.object({
-          template: Joi.string().hex().length(24).required(),
+          template: Joi.string().hex().length(24),
+          templateId: Joi.string().hex().length(24),
           qty: Joi.number().integer().min(1).required(),
           title: Joi.string().trim().min(1).max(300).optional(),
           price: Joi.number().min(0).optional(),
           cover: Joi.string().trim().min(3).max(2000).optional(),
+        }).custom((value, helpers) => {
+          const id = value.template || value.templateId;
+          if (!id) {
+            return helpers.error('any.custom', {
+              message: 'Each item requires template or templateId',
+            });
+          }
+          return { ...value, template: id };
         }),
       )
       .min(1)

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { normalizeRemoteImageSrc, remoteCoverLoader } from '@/lib/utils';
 import { Template } from '@/types';
 import { Button } from './ui/Button';
 import { motion } from 'framer-motion';
@@ -39,7 +40,8 @@ export function TemplateCard({ template }: TemplateCardProps) {
           <Link href={`/templates/${template._id}`}>
             <div className='relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-2xl bg-white/30'>
               <Image
-                src={template.cover}
+                loader={remoteCoverLoader}
+                src={normalizeRemoteImageSrc(template.cover)}
                 alt={template.title}
                 fill
                 className='object-cover transition-transform duration-500 group-hover:scale-110'

@@ -1,5 +1,7 @@
 'use client';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Pencil, Save } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
@@ -13,17 +15,20 @@ import {
   getUserFacingErrorMessage,
   logErrorForDev,
 } from '@/lib/userFacingError';
+import { useConfirm } from '@/components/confirm/ConfirmProvider';
 
 export default function EditProfilePage() {
+  const router = useRouter();
   const { toast } = useToast();
   const meQuery = useMe();
   const updateProfile = useUpdateProfile();
+  const confirm = useConfirm();
   const user = meQuery.data?.user || null;
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<EditProfileValues>({
     resolver: zodResolver(editProfileSchema),
     values: {
@@ -32,6 +37,16 @@ export default function EditProfilePage() {
     },
     mode: 'onTouched',
   });
+
+  useEffect(() => {
+    if (!isDirty) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, [isDirty]);
 
   if (meQuery.isLoading) return null;
   if (!user) return null;
@@ -52,6 +67,21 @@ export default function EditProfilePage() {
       <div className='relative mx-auto max-w-3xl space-y-4'>
         <Link
           href='/profile'
+          onClick={(e) => {
+            if (!isDirty) return;
+            e.preventDefault();
+            void confirm({
+              variant: 'warning',
+              title: 'Discard your changes?',
+              description:
+                'You have unsaved edits. Leave without saving?',
+              confirmLabel: 'Discard',
+              cancelLabel: 'Keep editing',
+              onConfirm: async () => {
+                router.push('/profile');
+              },
+            });
+          }}
           className='inline-flex items-center gap-2 text-sm font-extrabold text-indigo-700'
         >
           <ArrowLeft className='h-4 w-4' />
@@ -80,24 +110,35 @@ export default function EditProfilePage() {
           </div>
 
           <form
-            onSubmit={handleSubmit(async (data) => {
-              try {
-                await updateProfile.mutateAsync({
-                  username: data.username || '',
-                  email: data.email || '',
-                });
-                toast('Profile updated successfully!', {
-                  title: 'Success',
-                  variant: 'success',
-                });
-              } catch (error: any) {
-                logErrorForDev(error);
-                const msg = getUserFacingErrorMessage(
-                  error,
-                  'Failed to update profile',
-                );
-                toast(msg, { title: 'Error', variant: 'error' });
-              }
+            onSubmit={handleSubmit((data) => {
+              void confirm({
+                variant: 'neutral',
+                title: 'Save profile changes?',
+                description:
+                  'Your username and email will be updated for this account.',
+                confirmLabel: 'Save changes',
+                cancelLabel: 'Keep editing',
+                onConfirm: async () => {
+                  try {
+                    await updateProfile.mutateAsync({
+                      username: data.username || '',
+                      email: data.email || '',
+                    });
+                    toast('Profile updated successfully!', {
+                      title: 'Success',
+                      variant: 'success',
+                    });
+                  } catch (error: unknown) {
+                    logErrorForDev(error);
+                    const msg = getUserFacingErrorMessage(
+                      error,
+                      'Failed to update profile',
+                    );
+                    toast(msg, { title: 'Error', variant: 'error' });
+                    throw error;
+                  }
+                },
+              });
             })}
             className='mt-6 space-y-4'
           >

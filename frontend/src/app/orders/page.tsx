@@ -34,6 +34,36 @@ function statusLabel(status: string) {
   }
 }
 
+function paymentBadgeClass(paymentStatus?: string) {
+  const p = paymentStatus ?? 'paid';
+  switch (p) {
+    case 'paid':
+      return 'bg-emerald-500/12 text-emerald-900 border-emerald-200';
+    case 'failed':
+    case 'refunded':
+      return 'bg-rose-500/12 text-rose-900 border-rose-200';
+    default:
+      return 'bg-amber-500/12 text-amber-900 border-amber-200';
+  }
+}
+
+function paymentBadgeLabel(paymentStatus?: string) {
+  const p = paymentStatus ?? 'paid';
+  switch (p) {
+    case 'paid':
+      return 'Paid';
+    case 'pending':
+    case 'unpaid':
+      return 'Awaiting payment';
+    case 'failed':
+      return 'Payment failed';
+    case 'refunded':
+      return 'Refunded';
+    default:
+      return p;
+  }
+}
+
 function statusClass(status: string) {
   switch (status) {
     case 'paid':
@@ -128,7 +158,17 @@ export default function OrdersPage() {
                   </div>
                 </div>
 
-                <div className='flex items-center gap-3'>
+                <div className='flex flex-wrap items-center gap-2 sm:gap-3'>
+                  {(o.paymentStatus === 'pending' ||
+                    o.paymentStatus === 'unpaid') && (
+                    <div
+                      className={`rounded-full border px-3 py-1 text-xs font-extrabold ${paymentBadgeClass(
+                        o.paymentStatus,
+                      )}`}
+                    >
+                      {paymentBadgeLabel(o.paymentStatus)}
+                    </div>
+                  )}
                   <div
                     className={`rounded-full border px-3 py-1 text-xs font-extrabold ${statusClass(
                       o.status,

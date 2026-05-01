@@ -6,11 +6,13 @@ import { motion } from 'framer-motion';
 import { Sparkles, ArrowRight, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useLogout, useMe } from '@/lib/authQuery';
+import { useConfirm } from '@/components/confirm/ConfirmProvider';
 
 export default function WelcomePage() {
   const router = useRouter();
   const meQuery = useMe();
   const logout = useLogout();
+  const confirm = useConfirm();
 
   const user = meQuery.data?.user || null;
 
@@ -122,10 +124,21 @@ export default function WelcomePage() {
 
           <button
             type='button'
-            onClick={() => {
-              logout();
-              router.push('/');
-            }}
+            onClick={() =>
+              void confirm({
+                variant: 'danger',
+                title: 'Log out?',
+                description:
+                  'You will need to sign in again to continue shopping.',
+                confirmLabel: 'Log out',
+                cancelLabel: 'Stay signed in',
+                closeOnBackdrop: false,
+                onConfirm: async () => {
+                  await logout();
+                  router.push('/');
+                },
+              })
+            }
             className='mt-6 inline-flex items-center gap-2 text-sm font-extrabold text-rose-700 hover:underline'
           >
             <LogOut className='h-4 w-4' />

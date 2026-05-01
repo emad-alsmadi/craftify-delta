@@ -7,10 +7,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, Trash2, Minus, Plus, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useCart } from '@/lib/cartStore';
+import { normalizeRemoteImageSrc, remoteCoverLoader } from '@/lib/utils';
+import { useConfirm } from '@/components/confirm/ConfirmProvider';
 
 export default function CartPage() {
   const router = useRouter();
   const { state, subtotal, setCartQty, removeFromCart, clearCart } = useCart();
+  const confirm = useConfirm();
   const items = state.items;
 
   const gridVariants = {
@@ -62,7 +65,19 @@ export default function CartPage() {
               <Button
                 size='sm'
                 className='w-full rounded-full bg-gradient-to-r from-rose-600 via-fuchsia-600 to-amber-500 text-white shadow-md transition hover:brightness-110 active:brightness-95 sm:w-auto'
-                onClick={() => clearCart()}
+                onClick={() =>
+                  void confirm({
+                    variant: 'warning',
+                    title: 'Clear your cart?',
+                    description:
+                      'All items will be removed. You can add templates again anytime.',
+                    confirmLabel: 'Clear cart',
+                    cancelLabel: 'Keep shopping',
+                    onConfirm: async () => {
+                      clearCart();
+                    },
+                  })
+                }
               >
                 Clear cart
               </Button>
@@ -112,7 +127,8 @@ export default function CartPage() {
                   <div className='flex flex-col gap-4 sm:flex-row'>
                     <div className='relative h-28 w-24 overflow-hidden rounded-2xl border border-white/30 bg-white/20 sm:h-24 sm:w-20'>
                       <Image
-                        src={item.cover}
+                        loader={remoteCoverLoader}
+                        src={normalizeRemoteImageSrc(item.cover)}
                         alt={item.title}
                         fill
                         className='object-cover'
@@ -135,7 +151,18 @@ export default function CartPage() {
                           type='button'
                           size='icon'
                           className='h-10 w-10 rounded-2xl border border-white/35 bg-white/45 text-rose-700 shadow-sm backdrop-blur-xl transition hover:bg-white/70'
-                          onClick={() => removeFromCart(item.templateId)}
+                          onClick={() =>
+                            void confirm({
+                              variant: 'danger',
+                              title: 'Remove this template?',
+                              description: `"${item.title}" will be removed from your cart.`,
+                              confirmLabel: 'Remove',
+                              cancelLabel: 'Keep it',
+                              onConfirm: async () => {
+                                removeFromCart(item.templateId);
+                              },
+                            })
+                          }
                           aria-label='Remove'
                         >
                           <Trash2 className='h-4 w-4' />
@@ -225,7 +252,8 @@ export default function CartPage() {
             </div>
 
             <div className='mt-5 text-xs font-semibold text-indigo-950/60'>
-              Orders are created without payment for now.
+              Checkout uses Stripe when configured on the API; otherwise orders
+              are created locally for development.
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { ToastProvider } from '@/components/ui/Toast';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useToast } from '@/components/ui/Toast';
+import { ConfirmProvider } from '@/components/confirm/ConfirmProvider';
 
 function AuthErrorHandler() {
   const { toast } = useToast();
@@ -33,8 +34,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
-        <AuthErrorHandler />
-        {children}
+        <ConfirmProvider>
+          <AuthErrorHandler />
+          {children}
+        </ConfirmProvider>
       </ToastProvider>
     </QueryClientProvider>
   );

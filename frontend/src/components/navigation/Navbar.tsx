@@ -15,14 +15,17 @@ import {
   LogOut,
   Settings,
   ChevronDown,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLogout, useMe } from '@/lib/authQuery';
 import { useCart } from '@/lib/cartStore';
+import { useConfirm } from '@/components/confirm/ConfirmProvider';
 
 export const navItems = [
   { href: '/', label: 'Templates', icon: LayoutGrid },
   { href: '/creators', label: 'Creators', icon: Users },
+  { href: '/pricing', label: 'Pricing', icon: Sparkles },
   { href: '/cart', label: 'Cart', icon: ShoppingCart },
   { href: '/orders', label: 'Orders', icon: Receipt },
   { href: '/about', label: 'About', icon: Info },
@@ -84,6 +87,7 @@ export function Navbar() {
   const meQuery = useMe();
   const logout = useLogout();
   const cart = useCart();
+  const confirm = useConfirm();
   const user = meQuery.data?.user || null;
   const loading = meQuery.isLoading;
   const hydrated = true;
@@ -242,8 +246,19 @@ export function Navbar() {
                       <DropdownMenu.Item
                         onSelect={(e) => {
                           e.preventDefault();
-                          logout();
-                          router.push('/');
+                          void confirm({
+                            variant: 'danger',
+                            title: 'Log out?',
+                            description:
+                              'You will need to sign in again to access your cart, orders, and profile.',
+                            confirmLabel: 'Log out',
+                            cancelLabel: 'Stay signed in',
+                            closeOnBackdrop: false,
+                            onConfirm: async () => {
+                              await logout();
+                              router.push('/');
+                            },
+                          });
                         }}
                         className='flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-extrabold text-indigo-950 outline-none transition hover:bg-rose-500/10'
                       >

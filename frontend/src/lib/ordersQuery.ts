@@ -4,7 +4,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { ordersApi } from '@/lib/api';
+import { ordersApi, type OrderCheckoutPayload } from '@/lib/api';
 import type { Order } from '@/types';
 
 export const ORDERS_MY_KEY = ['orders', 'my'] as const;
@@ -17,19 +17,7 @@ export function useCreateOrderMutation() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: {
-      items: { templateId: string; qty: number }[];
-      shippingAddress: {
-        name: string;
-        phone: string;
-        address: string;
-        city: string;
-        zip: string;
-        notes?: string;
-      };
-      shippingPrice?: number;
-      taxPrice?: number;
-    }) => {
+    mutationFn: async (payload: OrderCheckoutPayload) => {
       return await ordersApi.createOrder(payload);
     },
     onSuccess: async () => {

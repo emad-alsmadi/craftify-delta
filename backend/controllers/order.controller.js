@@ -1,21 +1,34 @@
 const asyncHandler = require('express-async-handler');
 const { Order, validateCreateOrder } = require('../models/Order');
 const { Template } = require('../models/Template');
+const { serializeOrder, serializeOrders } = require('../utils/serializeOrder');
 
 const createOrder = asyncHandler(async (req, res) => {
+  const stripeKey = process.env.STRIPE_SECRET_KEY?.trim();
+  const allowDirectDev =
+    process.env.DEV_ALLOW_DIRECT_ORDERS === 'true' ||
+    process.env.ALLOW_DIRECT_ORDERS === 'true';
+
+  if (stripeKey && !allowDirectDev) {
+    return res.status(400).json({
+      message:
+        'Direct order creation is disabled when Stripe is configured. Use checkout to pay securely. For local development you may set DEV_ALLOW_DIRECT_ORDERS=true on the backend.',
+    });
+  }
+
   const userId = req.user?.id ?? req.user?._id;
   if (!userId) {
     return res.status(401).json({ message: 'Token is not valid!' });
   }
 
-  const { error } = validateCreateOrder(req.body);
+  const { error, value } = validateCreateOrder(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-  const { items, shippingAddress } = req.body;
-  const shippingPrice = Number(req.body.shippingPrice ?? 0);
-  const taxPrice = Number(req.body.taxPrice ?? 0);
+  const { items, shippingAddress } = value;
+  const shippingPrice = Number(value.shippingPrice ?? 0);
+  const taxPrice = Number(value.taxPrice ?? 0);
 
   // Validate that all template items exist
   const templateIds = items.map((i) => i.template);
@@ -60,14 +73,16 @@ const createOrder = asyncHandler(async (req, res) => {
       ...shippingAddress,
       notes: shippingAddress.notes || '',
     },
-    status: 'pending',
+    status: 'paid',
     itemsPrice,
     shippingPrice,
     taxPrice,
     totalPrice,
+    paymentStatus: 'paid',
+    paidAt: new Date(),
   });
 
-  res.status(201).json(order);
+  res.status(201).json(serializeOrder(order));
 });
 
 const getMyOrders = asyncHandler(async (req, res) => {
@@ -80,7 +95,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 })
     .lean();
 
-  res.status(200).json(orders);
+  res.status(200).json(serializeOrders(orders));
 });
 
 const getOrderById = asyncHandler(async (req, res) => {
@@ -100,7 +115,7 @@ const getOrderById = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: 'Order not found' });
   }
 
-  res.status(200).json(order);
+  res.status(200).json(serializeOrder(order));
 });
 
 module.exports = {

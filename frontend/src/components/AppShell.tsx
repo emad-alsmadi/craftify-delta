@@ -8,12 +8,14 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { cn } from '@/lib/utils';
 import { LogIn, LogOut, MoreHorizontal, User } from 'lucide-react';
 import { useLogout, useMe } from '@/lib/authQuery';
+import { useConfirm } from '@/components/confirm/ConfirmProvider';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const meQuery = useMe();
   const logout = useLogout();
+  const confirm = useConfirm();
   const user = meQuery.data?.user || null;
   const loading = meQuery.isLoading;
   const hydrated = true;
@@ -42,7 +44,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <nav className='fixed inset-x-0 bottom-0 z-50 border-t border-white/30 bg-white/65 backdrop-blur-xl md:hidden'>
         <div className='mx-auto grid max-w-7xl grid-cols-5 items-stretch gap-1 px-1 py-2'>
           {navItems
-            .filter((item) => item.href !== '/about')
+            .filter((item) => item.href !== '/about' && item.href !== '/pricing')
             .slice(0, 4)
             .map((item) => {
               const active = pathname === item.href;
@@ -89,6 +91,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               >
                 <DropdownMenu.Item asChild>
                   <Link
+                    href='/pricing'
+                    className='flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-indigo-950 outline-none transition hover:bg-indigo-900/10'
+                  >
+                    Pricing
+                  </Link>
+                </DropdownMenu.Item>
+
+                <DropdownMenu.Item asChild>
+                  <Link
                     href='/about'
                     className='flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-indigo-950 outline-none transition hover:bg-indigo-900/10'
                   >
@@ -122,8 +133,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <DropdownMenu.Item
                       onSelect={(e) => {
                         e.preventDefault();
-                        logout();
-                        router.push('/');
+                        void confirm({
+                          variant: 'danger',
+                          title: 'Log out?',
+                          description:
+                            'You will need to sign in again to access your cart, orders, and profile.',
+                          confirmLabel: 'Log out',
+                          cancelLabel: 'Stay signed in',
+                          closeOnBackdrop: false,
+                          onConfirm: async () => {
+                            await logout();
+                            router.push('/');
+                          },
+                        });
                       }}
                       className='flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-extrabold text-indigo-950 outline-none transition hover:bg-rose-500/10'
                     >

@@ -18,6 +18,7 @@ import {
   getUserFacingErrorMessage,
   logErrorForDev,
 } from '@/lib/userFacingError';
+import { normalizeRemoteImageSrc, remoteCoverLoader } from '@/lib/utils';
 
 function formatDate(value: string) {
   try {
@@ -104,7 +105,8 @@ export default function OrderDetailPage() {
               >
                 <div className='relative h-20 w-16 overflow-hidden rounded-2xl border border-white/30 bg-white/20'>
                   <Image
-                    src={it.cover}
+                    loader={remoteCoverLoader}
+                    src={normalizeRemoteImageSrc(it.cover)}
                     alt={it.title}
                     fill
                     className='object-cover'
@@ -152,6 +154,19 @@ export default function OrderDetailPage() {
               <div className='flex items-center justify-between text-base font-extrabold text-indigo-950'>
                 <span>Total</span>
                 <span>${order.totalPrice.toFixed(2)}</span>
+              </div>
+              <div className='rounded-2xl border border-white/25 bg-white/25 px-4 py-3'>
+                <div className='text-xs font-extrabold uppercase tracking-wider text-indigo-950/65'>
+                  Payment
+                </div>
+                <div className='mt-1 text-sm font-extrabold capitalize text-indigo-950'>
+                  {(order.paymentStatus ?? 'paid').replace('-', ' ')}
+                </div>
+                {order.paidAt ? (
+                  <div className='mt-1 text-xs font-semibold text-indigo-950/70'>
+                    Paid {formatDate(order.paidAt)}
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>

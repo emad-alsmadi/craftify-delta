@@ -59,7 +59,7 @@ const BASE_TEMPLATES = [
       'A clean CV template with strong hierarchy, perfect for tech and business roles (PDF/Word).',
     price: 6.99,
     cover:
-      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=600&fit=crop&crop=center&q=80',
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c',
   },
   {
     title: 'SaaS Dashboard UI Kit',
@@ -68,7 +68,7 @@ const BASE_TEMPLATES = [
       'Figma UI kit for SaaS dashboards: charts, tables, cards, and settings screens.',
     price: 14.0,
     cover:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=600&fit=crop&crop=center&q=80',
+      'https://images.unsplash.com/photo-1551288049-bebda4e38f71',
   },
   {
     title: 'Notion Habit Tracker',
@@ -77,7 +77,7 @@ const BASE_TEMPLATES = [
       'A Notion template to build habits, track streaks, and review weekly progress.',
     price: 4.5,
     cover:
-      'https://images.unsplash.com/photo-1518976024611-4884d8d7b9a4?w=400&h=600&fit=crop&crop=center&q=80',
+      'https://images.unsplash.com/photo-1518976024611-4884d8d7b9a4',
   },
   {
     title: 'Premium Icons Pack (200+)',
@@ -86,7 +86,7 @@ const BASE_TEMPLATES = [
       'A crisp icon pack for product UI (SVG/PNG), designed on a consistent grid.',
     price: 9.99,
     cover:
-      'https://images.unsplash.com/photo-1526481280695-3c687fd643ed?w=400&h=600&fit=crop&crop=center&q=80',
+      'https://images.unsplash.com/photo-1526481280695-3c687fd643ed',
   },
   {
     title: 'ATS Resume Template',
@@ -95,7 +95,7 @@ const BASE_TEMPLATES = [
       'An ATS-friendly resume template with multiple sections and easy customization.',
     price: 5.99,
     cover:
-      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=600&fit=crop&crop=center&q=80',
+      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d',
   },
   {
     title: 'Neon Landing Page Kit',
@@ -103,7 +103,7 @@ const BASE_TEMPLATES = [
     description: 'Landing sections, pricing, FAQs, and CTAs (Figma).',
     price: 11.5,
     cover:
-      'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?w=400&h=600&fit=crop&crop=center&q=80',
+      'https://images.unsplash.com/photo-1545239351-1141bd82e8a6',
   },
   {
     title: 'Personal Finance Sheet',
@@ -112,7 +112,7 @@ const BASE_TEMPLATES = [
       'Google Sheets template for budgeting, expenses, and monthly saving goals.',
     price: 3.5,
     cover:
-      'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=600&fit=crop&crop=center&q=80',
+      'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c',
   },
   {
     title: 'Brand Identity Starter Kit',
@@ -121,7 +121,7 @@ const BASE_TEMPLATES = [
       'Brand kit with logo grid, colors, typography, and presentation slides.',
     price: 12.99,
     cover:
-      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=600&fit=crop&crop=center&q=80',
+      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f',
   },
 ];
 
