@@ -11,7 +11,10 @@ function getStripeOrThrow() {
 }
 
 function getFrontendBaseUrl() {
-  const base = process.env.FRONTEND_URL || 'http://localhost:3000';
+  const base =
+    process.env.FRONTEND_URL ||
+    process.env.PUBLIC_FRONTEND_URL ||
+    'http://localhost:3001';
   return base.replace(/\/+$/, '');
 }
 
