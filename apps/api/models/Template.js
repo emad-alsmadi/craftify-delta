@@ -34,6 +34,17 @@ const TemplateSchema = new mongoose.Schema(
       minlength: 3,
       maxlength: 500,
     },
+    averageRating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
+    reviewCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   {
     timestamps: true,
