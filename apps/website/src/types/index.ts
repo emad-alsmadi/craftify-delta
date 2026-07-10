@@ -13,6 +13,8 @@ export interface Template {
   description: string;
   price: number;
   cover: string;
+  averageRating: number;
+  reviewCount: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -151,4 +153,29 @@ export interface WishlistItem {
   template: Template;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Review {
+  _id: string;
+  user: {
+    _id: string;
+    username: string;
+    email: string;
+  };
+  template: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ReviewPayload {
+  template: string;
+  rating: number;
+  comment: string;
+}
+
+export interface ReviewUpdatePayload {
+  rating?: number;
+  comment?: string;
 }

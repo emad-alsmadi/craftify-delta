@@ -13,6 +13,9 @@ import {
   CreatorPayload,
   UserUpdatePayload,
   WishlistItem,
+  Review,
+  ReviewPayload,
+  ReviewUpdatePayload,
 } from '@/types';
 import { getAuthToken } from '@/lib/authCookies';
 
@@ -290,6 +293,36 @@ export const wishlistApi = {
     templateId: string,
   ): Promise<{ isWishlisted: boolean }> => {
     const { data } = await api.get(`/wishlist/check/${templateId}`);
+    return data;
+  },
+};
+
+export const reviewsApi = {
+  createReview: async (payload: ReviewPayload): Promise<Review> => {
+    const { data } = await api.post('/reviews', payload);
+    return data;
+  },
+  updateReview: async (
+    reviewId: string,
+    payload: ReviewUpdatePayload,
+  ): Promise<Review> => {
+    const { data } = await api.put(`/reviews/${reviewId}`, payload);
+    return data;
+  },
+  deleteReview: async (reviewId: string): Promise<{ message: string }> => {
+    const { data } = await api.delete(`/reviews/${reviewId}`);
+    return data;
+  },
+  getTemplateReviews: async (templateId: string): Promise<Review[]> => {
+    const { data } = await api.get(`/reviews/template/${templateId}`);
+    return data;
+  },
+  getMyReview: async (templateId: string): Promise<Review | null> => {
+    const { data } = await api.get(`/reviews/my/${templateId}`);
+    return data;
+  },
+  getMyReviews: async (): Promise<Review[]> => {
+    const { data } = await api.get('/reviews/my');
     return data;
   },
 };
