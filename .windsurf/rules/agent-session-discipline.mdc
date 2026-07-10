@@ -1,0 +1,272 @@
+---
+description: Token/RAM discipline — scope, search limits, terminal policy, commit message policy, one task per session (Craftify)
+alwaysApply: true
+---
+
+# Agent Session Discipline
+
+## Default behavior (save tokens)
+
+1. **One task per conversation** — implement a single PR-sized item unless the user explicitly lists multiple tasks.
+
+2. **Never scan the whole repository.**
+   Only inspect the folders or files required for the current task.
+   Never grep/read the full project unless explicitly requested.
+
+3. **Limit file reading.**
+   Read only the minimum amount of code needed.
+   Prefer opening specific sections instead of entire files.
+
+4. **API lookup order**
+   - Check existing API patterns in `apps/api/routes/` and `apps/api/controllers/`
+   - Read controller implementation for request/response contracts
+   - Never assume API structure without verification
+
+5. **No unnecessary exploration.**
+   Do not use Explore Mode, Task Mode, or sub-agents for simple or localized tasks.
+
+6. **Minimize context usage.**
+   Never reload files that were already read during the same session unless they changed.
+
+7. **Keep edits localized.**
+   Match the existing architecture and coding style.
+   Avoid unrelated refactoring.
+
+8. **No new abstractions** unless they clearly reduce duplication or the user explicitly requests them.
+
+9. **No new dependencies** unless the user asks.
+
+10. **No tests** unless requested.
+
+11. **No commit or push** unless the user explicitly says:
+    - commit
+    - push
+    - create commit
+
+---
+
+# Terminal Policy (Important)
+
+## By default
+
+Do NOT execute terminal commands.
+
+Do NOT run:
+
+- npm
+- npx
+- pnpm
+- yarn
+- bun
+- tsc
+- eslint
+- prettier
+- vite
+- build
+- test
+- playwright
+- cypress
+- git
+- docker
+- bash
+- powershell
+- any shell command
+
+unless the user explicitly requests it.
+
+---
+
+## After finishing code changes
+
+Instead of executing terminal commands:
+
+Provide only a short manual validation command.
+
+Example:
+
+Validation command:
+
+```bash
+cd apps/website && npx tsc --noEmit
+```
+
+Do NOT execute it.
+
+The user will run it manually.
+
+---
+
+## If validation is required
+
+Ask first:
+
+> Should I run the validation, or will you run it manually?
+
+Do not assume permission.
+
+---
+
+# Commit Message Policy
+
+After any completed code change, bug fix, refactor, or feature addition:
+
+- Do NOT run `git commit`.
+- Do NOT run any git command.
+- Provide one short English commit message only.
+- Keep it concise and conventional.
+- Do not include long explanations.
+- Do not include multiple commit options unless the user asks.
+
+Format:
+
+```text
+Suggested commit:
+fix(scope): short description
+```
+
+Examples:
+
+```text
+Suggested commit:
+fix(checkout): improve 502 error handling with user-friendly message
+```
+
+```text
+Suggested commit:
+feat(reviews): add star rating display to template cards
+```
+
+```text
+Suggested commit:
+refactor(api): simplify payment verification logic
+```
+
+---
+
+# Scope Discipline
+
+When starting a task, first state:
+
+- Scope
+- Files to modify (maximum ~5 unless necessary)
+- API endpoint (if applicable)
+- What is explicitly out of scope
+
+Keep this section under 5 lines.
+
+---
+
+# Vague Continuations
+
+If the user says:
+
+- continue
+- yes
+- next
+- ابدأ
+- كمل
+- الخطوة التالية
+
+Do NOT resume the entire backlog.
+
+Instead:
+
+- ask one short clarification
+
+OR
+
+- continue only with the next unchecked item from the current task context.
+
+---
+
+# Prompt Template
+
+Preferred prompt format:
+
+Scope:
+[folder/files]
+
+Goal:
+[one sentence]
+
+Source:
+[controller/route reference]
+
+Constraints:
+
+- no repository scan
+- no terminal
+- no commit
+- max N files
+
+Success:
+
+- code completed
+- validation command provided
+- suggested commit message provided
+
+---
+
+# Context / RAM Hygiene
+
+- Read one file at a time.
+- Read only the required sections.
+- Avoid reopening files already inspected.
+- Never reload large files unless necessary.
+- Keep memory focused on the active task only.
+
+---
+
+# Diff Discipline
+
+- Smallest possible diff.
+- No formatting-only changes.
+- No unrelated renaming.
+- No import cleanup outside edited files.
+- No drive-by fixes.
+- Preserve existing coding patterns.
+
+---
+
+# Response Style
+
+Keep the final response short.
+
+Use this format:
+
+Changed:
+
+- one or two bullet points
+
+Files:
+
+- changed files only
+
+Validation command:
+
+```bash
+cd apps/website && npx tsc --noEmit
+```
+
+Suggested commit:
+
+```text
+fix(scope): short description
+```
+
+Notes:
+
+- blockers only
+
+Do not run the validation command.
+Do not run git commands.
+Do not include long explanations unless requested.
+
+---
+
+# Arabic-first UX
+
+- User-facing messages should remain Arabic where the project already uses Arabic.
+- Keep technical implementation in English.
+- Do not translate code.
+- Preserve existing localization patterns.

@@ -1,0 +1,79 @@
+# Craftify Templates Marketplace - Cursor AI Rules
+
+## Project Overview
+Craftify Templates Marketplace is a monorepo e-commerce application for buying and selling digital templates with Next.js 14+ frontend and Express.js backend.
+
+## Tech Stack
+- **Frontend**: Next.js 14+ (App Router), TypeScript, React Query, Zustand, Tailwind CSS, Framer Motion
+- **Backend**: Express.js, Node.js, MongoDB, Mongoose, Stripe
+- **Package Manager**: pnpm (monorepo workspace)
+
+## Monorepo Structure
+```
+craftify-templates-marketplac/
+├── apps/
+│   ├── api/          # Express.js backend (port 3001)
+│   └── website/      # Next.js frontend (port 3000)
+├── packages/         # Shared packages
+```
+
+## File Structure
+- **Frontend** (`apps/website/src/`):
+  - `app/` - Next.js App Router pages
+  - `components/` - Reusable UI components
+  - `components/ui/` - Base UI components
+  - `lib/` - API clients, utilities, types
+  - `hooks/` - Custom React hooks by domain
+  - `types/` - TypeScript definitions
+
+- **Backend** (`apps/api/`):
+  - `controllers/` - Route controllers
+  - `models/` - Mongoose models
+  - `routes/` - Express routes
+  - `middlewares/` - Custom middleware
+  - `services/` - External integrations (Stripe)
+
+## API Integration
+- Frontend uses `lib/api.ts` for all API calls
+- Backend routes in `apps/api/routes/`
+- Controllers in `apps/api/controllers/`
+- JWT authentication via `verfiyToken` middleware
+- Response format: `{ message, data?, errors? }`
+
+## Styling
+- Tailwind CSS with purple-indigo-cyan gradient theme
+- Glassmorphism effects (backdrop-blur, transparency)
+- Framer Motion for animations
+- Custom scrollbars matching brand identity
+- Mobile-first responsive design
+
+## Key Features
+- User authentication (JWT)
+- Template browsing & search
+- Wishlist management
+- Reviews & ratings (1-5 stars)
+- Shopping cart
+- Stripe payments
+- Order management
+- Creator profiles
+
+## Code Style
+- Functional components with hooks
+- TypeScript for type safety
+- camelCase for variables, PascalCase for components
+- Async/await for async operations
+- Small, focused components
+- Clean, maintainable code
+
+## Git Workflow
+- Conventional commits: `feat:`, `fix:`, `refactor:`
+- Atomic, focused commits
+- Clear commit messages
+
+## Important Notes
+- Backend runs on port 3001
+- Frontend runs on port 3000
+- Restart backend after adding new routes
+- Use React Query for data fetching
+- Handle errors gracefully with user-friendly messages
+- Arabic-first UX where applicable
