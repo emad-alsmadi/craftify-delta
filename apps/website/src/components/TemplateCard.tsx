@@ -4,6 +4,7 @@ import { normalizeRemoteImageSrc, remoteCoverLoader } from '@/lib/utils';
 import { Template } from '@/types';
 import { Button } from './ui/Button';
 import { WishlistButton } from './WishlistButton';
+import { StarRating } from './StarRating';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -55,6 +56,18 @@ export function TemplateCard({ template }: TemplateCardProps) {
           <p className='text-xs font-extrabold text-indigo-900/80'>
             by {creatorName}
           </p>
+          <div className='flex items-center gap-2'>
+            <StarRating
+              rating={template.averageRating}
+              size={14}
+              showValue={true}
+            />
+            {template.reviewCount > 0 && (
+              <span className='text-xs text-gray-600'>
+                ({template.reviewCount})
+              </span>
+            )}
+          </div>
           <div className='flex items-center justify-between'>
             <p className='text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-cyan-700'>
               ${template.price.toFixed(2)}
