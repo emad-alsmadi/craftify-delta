@@ -144,3 +144,11 @@ export type UserUpdatePayload = {
   roles?: AppRole[];
   password?: string;
 };
+
+export interface WishlistItem {
+  _id: string;
+  user: string;
+  template: Template;
+  createdAt: string;
+  updatedAt: string;
+}

@@ -12,6 +12,7 @@ import {
   TemplatePayload,
   CreatorPayload,
   UserUpdatePayload,
+  WishlistItem,
 } from '@/types';
 import { getAuthToken } from '@/lib/authCookies';
 
@@ -203,7 +204,9 @@ export const subscriptionsApi = {
 };
 
 export const adminApi = {
-  getTemplates: async (params: TemplatesQuery = {}): Promise<TemplatesResponse> => {
+  getTemplates: async (
+    params: TemplatesQuery = {},
+  ): Promise<TemplatesResponse> => {
     const { data } = await api.get('/templates', {
       params: { limit: 100, sort: '-createdAt', ...params },
     });
@@ -224,7 +227,9 @@ export const adminApi = {
     const { data } = await api.delete(`/templates/${id}`);
     return data;
   },
-  getCreators: async (params: CreatorsQuery = {}): Promise<CreatorsResponse> => {
+  getCreators: async (
+    params: CreatorsQuery = {},
+  ): Promise<CreatorsResponse> => {
     const { data } = await api.get('/creators', {
       params: { limit: 100, ...params },
     });
@@ -262,6 +267,29 @@ export const adminApi = {
   },
   deleteUser: async (id: string): Promise<{ message: string }> => {
     const { data } = await api.delete(`/users/${id}`);
+    return data;
+  },
+};
+
+export const wishlistApi = {
+  addToWishlist: async (templateId: string): Promise<{ message: string }> => {
+    const { data } = await api.post(`/wishlist/${templateId}`);
+    return data;
+  },
+  removeFromWishlist: async (
+    templateId: string,
+  ): Promise<{ message: string }> => {
+    const { data } = await api.delete(`/wishlist/${templateId}`);
+    return data;
+  },
+  getMyWishlist: async (): Promise<WishlistItem[]> => {
+    const { data } = await api.get('/wishlist/my');
+    return data;
+  },
+  checkWishlist: async (
+    templateId: string,
+  ): Promise<{ isWishlisted: boolean }> => {
+    const { data } = await api.get(`/wishlist/check/${templateId}`);
     return data;
   },
 };
