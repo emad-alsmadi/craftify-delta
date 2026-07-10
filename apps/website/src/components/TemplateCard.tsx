@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { normalizeRemoteImageSrc, remoteCoverLoader } from '@/lib/utils';
 import { Template } from '@/types';
 import { Button } from './ui/Button';
+import { WishlistButton } from './WishlistButton';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
@@ -37,8 +38,11 @@ export function TemplateCard({ template }: TemplateCardProps) {
           className='rounded-3xl border border-white/40 bg-white/45 p-4 shadow-sm backdrop-blur-xl'
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <Link href={`/templates/${template._id}`}>
-            <div className='relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-2xl bg-white/30'>
+          <div className='relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-2xl bg-white/30'>
+            <Link
+              href={`/templates/${template._id}`}
+              className='absolute inset-0 z-0'
+            >
               <Image
                 loader={remoteCoverLoader}
                 src={normalizeRemoteImageSrc(template.cover)}
@@ -48,8 +52,15 @@ export function TemplateCard({ template }: TemplateCardProps) {
                 sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
               />
               <div className='pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+            </Link>
+            <div className='absolute top-3 right-3 z-10'>
+              <WishlistButton
+                templateId={template._id}
+                variant='icon'
+                className='bg-white/90 text-indigo-950 hover:bg-white'
+              />
             </div>
-          </Link>
+          </div>
 
           <div className='space-y-2'>
             <h3 className='line-clamp-2 text-base font-extrabold tracking-tight text-indigo-950'>

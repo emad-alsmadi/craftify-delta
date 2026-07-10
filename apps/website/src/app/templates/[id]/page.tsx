@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { Template } from '@/types';
 import { Button } from '@/components/ui/Button';
+import { WishlistButton } from '@/components/WishlistButton';
 import { useToast } from '@/components/ui/Toast';
 import {
   Loader2,
@@ -142,6 +143,13 @@ export default function TemplateDetailPage() {
                   <Sparkles className='h-4 w-4' />
                   Featured
                 </motion.div>
+                <div className='absolute right-4 top-4'>
+                  <WishlistButton
+                    templateId={template._id}
+                    variant='icon'
+                    className='bg-white/90 text-indigo-950 hover:bg-white'
+                  />
+                </div>
               </motion.div>
             </div>
 
