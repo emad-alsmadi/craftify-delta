@@ -1,0 +1,84 @@
+# Devin Project Rules - Craftify Templates Marketplace
+
+## Project Overview
+Craftify Templates Marketplace is a monorepo application for buying and selling digital templates. It features user authentication, template browsing, wishlist management, reviews/ratings system, and Stripe payment integration.
+
+## Tech Stack
+- **Frontend Framework**: Next.js 14+ with App Router
+- **Backend Framework**: Express.js with Node.js
+- **Database**: MongoDB with Mongoose
+- **Styling**: Tailwind CSS
+- **State Management**: Zustand (cartStore, authStore)
+- **Data Fetching**: React Query (@tanstack/react-query)
+- **Forms**: React Hook Form
+- **Icons**: Lucide React
+- **Animations**: Framer Motion
+- **Payment**: Stripe
+- **Package Manager**: pnpm (monorepo)
+
+## Monorepo Structure
+```
+craftify-templates-marketplac/
+├── apps/
+│   ├── api/          # Express.js backend
+│   └── website/      # Next.js frontend
+├── packages/         # Shared packages
+└── package.json      # Root workspace config
+```
+
+## Frontend File Structure (apps/website/src/)
+- `app/` - Next.js App Router pages
+- `components/` - Reusable UI components
+- `components/ui/` - Base UI components (Button, Input, etc.)
+- `components/navigation/` - Navigation components
+- `lib/` - Utilities, API clients, types
+- `hooks/` - Custom React hooks organized by domain
+- `types/` - TypeScript type definitions
+
+## Backend File Structure (apps/api/)
+- `controllers/` - Route controllers
+- `models/` - Mongoose models
+- `routes/` - Express route definitions
+- `middlewares/` - Custom middleware
+- `services/` - External service integrations (Stripe)
+- `utils/` - Helper functions
+
+## Code Style
+- Use functional components with hooks (frontend)
+- Use async/await for async operations
+- Keep components small and focused
+- Use TypeScript for type safety
+- Follow existing naming conventions (camelCase for variables, PascalCase for components)
+- Use meaningful variable and function names
+
+## API Integration
+- Frontend uses `api.ts` in `lib/` for all API calls
+- Backend uses Express.js with middleware for authentication
+- Store auth tokens in cookies (authCookies)
+- Use React Query for data fetching and caching
+- Handle errors gracefully with user-friendly messages
+- Follow RESTful API patterns
+
+## Styling Guidelines
+- Use Tailwind CSS for all styling
+- Follow the existing design system (purple-indigo-cyan gradient theme)
+- Ensure responsive design (mobile-first approach)
+- Use glassmorphism effects (backdrop-blur, transparency)
+- Maintain consistent spacing and typography
+- Use Framer Motion for smooth animations
+
+## Key Features
+- User authentication with JWT
+- Template browsing and search
+- Wishlist management
+- Reviews and ratings system
+- Shopping cart functionality
+- Stripe payment integration
+- Order management
+- Creator profiles
+
+## Git Workflow
+- Write clear, descriptive commit messages
+- Use conventional commit format (feat:, fix:, refactor:)
+- Keep commits atomic and focused
+- Test changes before committing
