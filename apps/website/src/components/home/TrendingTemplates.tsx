@@ -14,9 +14,15 @@ interface TrendingTemplatesProps {
   itemVariants: any;
 }
 
-export function TrendingTemplates({ templates, loading, error, gridVariants, itemVariants }: TrendingTemplatesProps) {
+export function TrendingTemplates({
+  templates,
+  loading,
+  error,
+  gridVariants,
+  itemVariants,
+}: TrendingTemplatesProps) {
   return (
-    <div className='bg-white py-20'>
+    <div className='bg-slate-50 py-20'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between mb-8'>
           <div>

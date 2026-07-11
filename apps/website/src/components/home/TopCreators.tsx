@@ -39,7 +39,7 @@ export function TopCreators() {
   ];
 
   return (
-    <div className='bg-white py-20'>
+    <div className='bg-slate-50 py-20'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between mb-8'>
           <div>
@@ -68,7 +68,7 @@ export function TopCreators() {
             >
               <motion.div
                 whileHover={{ y: -4 }}
-                className='bg-gray-50 rounded-lg p-6 text-center hover:shadow-lg transition-shadow duration-300 border border-gray-200 hover:border-gray-300'
+                className='bg-white rounded-lg p-6 text-center hover:shadow-lg transition-shadow duration-300 border border-slate-200 hover:border-slate-300'
               >
                 <div className='inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-600 via-indigo-600 to-cyan-500 text-white text-xl font-bold mb-4 group-hover:scale-110 transition-transform duration-300'>
                   {creator.avatar}

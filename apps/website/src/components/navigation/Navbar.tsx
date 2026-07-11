@@ -132,23 +132,23 @@ export function Navbar() {
       {/* Top bar */}
       <div className='bg-gray-900 text-white text-xs py-6 px-4'>
         <div className='max-w-7xl mx-auto flex justify-between items-center'>
-          <span>Premium digital templates marketplace</span>
+          <span className='text-[15px]'>Premium digital templates marketplace</span>
           <div className='flex items-center gap-4'>
             <Link
               href='/about'
-              className='hover:text-gray-300 transition-colors'
+              className='text-[15px] hover:text-gray-300 transition-colors'
             >
               About
             </Link>
             <Link
               href='/pricing'
-              className='hover:text-gray-300 transition-colors'
+              className='text-[15px] hover:text-gray-300 transition-colors'
             >
               Pricing
             </Link>
             <Link
               href='/creators'
-              className='hover:text-gray-300 transition-colors'
+              className='text-[15px] hover:text-gray-300 transition-colors'
             >
               Sell
             </Link>

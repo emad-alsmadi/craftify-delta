@@ -1,13 +1,9 @@
 'use client';
 import { useMemo, useState } from 'react';
-import { TemplateCard } from '@/components/TemplateCard';
-import { FilterSidebar } from '@/components/FilterSidebar';
-import { Pagination } from '@/components/ui/Pagination';
-import { Loader2 } from 'lucide-react';
-import { Template } from '@/types';
-import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import type { TemplatesQuery } from '@/types';
 import { useTemplates } from '@/hooks/templates/templatesQuery';
+import { HeroSection } from '@/components/home/HeroSection';
 import { FeaturedCategories } from '@/components/home/FeaturedCategories';
 import { WhyChooseUs } from '@/components/home/WhyChooseUs';
 import { StatsBar } from '@/components/home/StatsBar';
@@ -18,11 +14,13 @@ import { TopCreators } from '@/components/home/TopCreators';
 import { CTASection } from '@/components/home/CTASection';
 
 export default function HomePage() {
+  const router = useRouter();
   const [query, setQuery] = useState<TemplatesQuery>({
     page: 1,
     limit: 8,
     sort: 'createdAt',
   });
+  const [searchQuery, setSearchQuery] = useState('');
 
   const stableQuery = useMemo(() => query, [query]);
   const templatesQuery = useTemplates(stableQuery);
@@ -36,6 +34,13 @@ export default function HomePage() {
 
   const handleFiltersChange = (newFilters: any) => {
     setQuery((q: TemplatesQuery) => ({ ...q, ...newFilters, page: 1 }));
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/templates?q=${encodeURIComponent(searchQuery)}`);
+    }
   };
 
   const gridVariants = {
@@ -53,6 +58,12 @@ export default function HomePage() {
 
   return (
     <div className='space-y-0'>
+      <HeroSection
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onSearchSubmit={handleSearch}
+      />
+
       <FeaturedCategories />
 
       <WhyChooseUs />

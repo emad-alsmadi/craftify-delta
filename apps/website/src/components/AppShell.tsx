@@ -11,13 +11,7 @@ import { useLogout, useMe } from '@/hooks/auth/authQuery';
 import { useConfirm } from '@/components/confirm/ConfirmProvider';
 import { Footer } from '@/components/Footer';
 
-export function AppShell({
-  children,
-  hero,
-}: {
-  children: React.ReactNode;
-  hero?: React.ReactNode;
-}) {
+export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const meQuery = useMe();
@@ -31,9 +25,7 @@ export function AppShell({
     <div className='min-h-screen bg-gray-50'>
       <Navbar />
 
-      {hero && pathname === '/' && hero}
-
-      <div className='mx-auto max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:px-8'>
+      <div className='mx-auto max-w-8xl gap-6 px-4 py-6 sm:px-6 lg:px-8'>
         <main className='min-w-0 pb-20 md:pb-0'>
           <AnimatePresence mode='wait'>
             <motion.div

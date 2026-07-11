@@ -31,7 +31,7 @@ export function Testimonials() {
   ];
 
   return (
-    <div className='bg-white py-20'>
+    <div className='bg-slate-50 py-20'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='text-center mb-12'>
           <h2 className='text-3xl font-bold text-gray-900 mb-4'>
@@ -47,7 +47,7 @@ export function Testimonials() {
             <motion.div
               key={testimonial.name}
               whileHover={{ y: -4 }}
-              className='bg-gray-50 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 border border-gray-200'
+              className='bg-white rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 border border-slate-200'
             >
               <div className='flex items-center gap-1 mb-4'>
                 {[...Array(testimonial.rating)].map((_, i) => (
