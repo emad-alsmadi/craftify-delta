@@ -27,6 +27,14 @@ const TemplateSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+    basePrice: {
+      type: Number,
+      required: true,
+      min: 0,
+      default: function () {
+        return this.price;
+      },
+    },
     cover: {
       type: String,
       required: true,
