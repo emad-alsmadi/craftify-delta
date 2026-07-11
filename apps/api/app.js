@@ -39,6 +39,7 @@ app.use('/api/', require('./routes/payments'));
 app.use('/api/', require('./routes/subscriptions'));
 app.use('/api/', require('./routes/wishlist'));
 app.use('/api/', require('./routes/reviews'));
+app.use('/api/', require('./routes/downloads'));
 
 // Friendly roots (this process is API-only; the Next.js app is a separate server)
 app.get('/', (req, res) => {

@@ -179,3 +179,20 @@ export interface ReviewUpdatePayload {
   rating?: number;
   comment?: string;
 }
+
+export interface Download {
+  _id: string;
+  user: string;
+  template: Template;
+  order: Order;
+  downloadCount: number;
+  lastDownloadDate?: string;
+  downloadLimit: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DownloadPayload {
+  templateId: string;
+  orderId: string;
+}

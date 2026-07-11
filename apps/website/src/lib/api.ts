@@ -16,6 +16,8 @@ import {
   Review,
   ReviewPayload,
   ReviewUpdatePayload,
+  Download,
+  DownloadPayload,
 } from '@/types';
 import { getAuthToken } from '@/lib/authCookies';
 import { endpoints } from '@/lib/endpoints';
@@ -608,6 +610,64 @@ export const reviewsApi = {
    */
   getMyReviews: async (): Promise<Review[]> => {
     const { data } = await api.get(endpoints.reviews.myReviews);
+    return data;
+  },
+};
+
+/**
+ * Downloads API - Handles user download operations
+ */
+export const downloadsApi = {
+  /**
+   * Create a download entry after successful payment
+   * @param payload - Download creation data (templateId, orderId)
+   * @returns Created download details
+   */
+  createDownload: async (payload: DownloadPayload): Promise<Download> => {
+    const { data } = await api.post(endpoints.downloads.create, payload);
+    return data;
+  },
+  /**
+   * Fetch current user's downloads
+   * @returns Array of user's downloads
+   */
+  getMyDownloads: async (): Promise<Download[]> => {
+    const { data } = await api.get(endpoints.downloads.my);
+    return data;
+  },
+  /**
+   * Fetch a single download by ID
+   * @param id - Download ID
+   * @returns Download details
+   */
+  getDownloadById: async (id: string): Promise<Download> => {
+    const { data } = await api.get(endpoints.downloads.details(id));
+    return data;
+  },
+  /**
+   * Record a download and increment download count
+   * @param id - Download ID
+   * @returns Download record with file URL and remaining downloads
+   */
+  recordDownload: async (
+    id: string,
+  ): Promise<{
+    message: string;
+    downloadCount: number;
+    lastDownloadDate: string;
+    fileUrl: string;
+    remainingDownloads: number;
+  }> => {
+    const { data } = await api.post(endpoints.downloads.download(id));
+    return data;
+  },
+  /**
+   * Delete a download entry
+   * @param id - Download ID
+   * @returns Deletion confirmation message
+   */
+  deleteDownload: async (id: string): Promise<{ message: string }> => {
+    const { data } = await api.delete(endpoints.downloads.delete(id));
     return data;
   },
 };

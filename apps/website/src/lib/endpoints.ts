@@ -67,4 +67,11 @@ export const endpoints = {
     my: (templateId: string) => `/reviews/my/${templateId}`,
     myReviews: '/reviews/my',
   },
+  downloads: {
+    create: '/downloads',
+    my: '/downloads/my',
+    details: (id: string) => `/downloads/${id}`,
+    download: (id: string) => `/downloads/${id}/download`,
+    delete: (id: string) => `/downloads/${id}`,
+  },
 } as const;
