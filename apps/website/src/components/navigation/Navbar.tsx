@@ -130,7 +130,7 @@ export function Navbar() {
   return (
     <header className='sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm'>
       {/* Top bar */}
-      <div className='bg-gray-900 text-white text-xs py-1 px-4'>
+      <div className='bg-gray-900 text-white text-xs py-6 px-4'>
         <div className='max-w-7xl mx-auto flex justify-between items-center'>
           <span>Premium digital templates marketplace</span>
           <div className='flex items-center gap-4'>
