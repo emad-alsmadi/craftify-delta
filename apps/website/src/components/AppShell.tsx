@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { LogIn, LogOut, MoreHorizontal, User } from 'lucide-react';
 import { useLogout, useMe } from '@/hooks/auth/authQuery';
 import { useConfirm } from '@/components/confirm/ConfirmProvider';
+import { Footer } from '@/components/Footer';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -21,7 +22,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const hydrated = true;
 
   return (
-    <div className='min-h-screen bg-[radial-gradient(1100px_500px_at_10%_0%,rgba(245,158,11,0.22),transparent_55%),radial-gradient(1000px_460px_at_95%_15%,rgba(217,70,239,0.20),transparent_55%),radial-gradient(900px_520px_at_40%_120%,rgba(34,211,238,0.22),transparent_55%)]'>
+    <div className='min-h-screen bg-gray-50'>
       <Navbar />
 
       <div className='mx-auto max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:px-8'>
@@ -41,10 +42,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </main>
       </div>
 
-      <nav className='fixed inset-x-0 bottom-0 z-50 border-t border-white/30 bg-white/65 backdrop-blur-xl md:hidden'>
+      <Footer />
+
+      <nav className='fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white md:hidden'>
         <div className='mx-auto grid max-w-7xl grid-cols-5 items-stretch gap-1 px-1 py-2'>
           {navItems
-            .filter((item) => item.href !== '/about' && item.href !== '/pricing')
+            .filter(
+              (item) => item.href !== '/about' && item.href !== '/pricing',
+            )
             .slice(0, 4)
             .map((item) => {
               const active = pathname === item.href;
@@ -55,11 +60,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   href={item.href}
                   className={cn(
                     'flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-semibold',
-                    active ? 'text-fuchsia-700' : 'text-indigo-700/70',
+                    active ? 'text-indigo-600' : 'text-gray-600',
                   )}
                 >
                   <Icon
-                    className={cn('h-5 w-5', active && 'text-fuchsia-700')}
+                    className={cn('h-5 w-5', active && 'text-indigo-600')}
                   />
                   <span className='w-full truncate text-center'>
                     {item.label}
@@ -74,7 +79,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 type='button'
                 className={cn(
                   'flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-semibold',
-                  'text-indigo-700/70',
+                  'text-gray-600',
                 )}
               >
                 <MoreHorizontal className='h-5 w-5' />
@@ -87,12 +92,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 align='end'
                 side='top'
                 sideOffset={10}
-                className='z-[60] min-w-[220px] overflow-hidden rounded-2xl border border-white/40 bg-white/85 p-2 shadow-xl backdrop-blur-xl'
+                className='z-50 min-w-[220px] overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg'
               >
                 <DropdownMenu.Item asChild>
                   <Link
                     href='/pricing'
-                    className='flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-indigo-950 outline-none transition hover:bg-indigo-900/10'
+                    className='flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 outline-none transition hover:bg-gray-100'
                   >
                     Pricing
                   </Link>
@@ -101,21 +106,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <DropdownMenu.Item asChild>
                   <Link
                     href='/about'
-                    className='flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-indigo-950 outline-none transition hover:bg-indigo-900/10'
+                    className='flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 outline-none transition hover:bg-gray-100'
                   >
                     About
                   </Link>
                 </DropdownMenu.Item>
 
-                <DropdownMenu.Separator className='my-2 h-px bg-indigo-900/10' />
+                <DropdownMenu.Separator className='my-1 h-px bg-gray-200' />
 
                 {!hydrated || !user ? (
                   <DropdownMenu.Item asChild>
                     <Link
                       href='/auth/login'
-                      className='flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-indigo-950 outline-none transition hover:bg-indigo-900/10'
+                      className='flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 outline-none transition hover:bg-gray-100'
                     >
-                      <LogIn className='h-4 w-4 text-indigo-700' />
+                      <LogIn className='h-4 w-4 text-gray-600' />
                       Login
                     </Link>
                   </DropdownMenu.Item>
@@ -124,9 +129,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <DropdownMenu.Item asChild>
                       <Link
                         href='/profile'
-                        className='flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-indigo-950 outline-none transition hover:bg-indigo-900/10'
+                        className='flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 outline-none transition hover:bg-gray-100'
                       >
-                        <User className='h-4 w-4 text-indigo-700' />
+                        <User className='h-4 w-4 text-gray-600' />
                         Profile
                       </Link>
                     </DropdownMenu.Item>
@@ -147,9 +152,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                           },
                         });
                       }}
-                      className='flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-extrabold text-indigo-950 outline-none transition hover:bg-rose-500/10'
+                      className='flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-extrabold text-red-600 outline-none transition hover:bg-red-50'
                     >
-                      <LogOut className='h-4 w-4 text-rose-700' />
+                      <LogOut className='h-4 w-4 text-red-600' />
                       Logout
                     </DropdownMenu.Item>
                   </>

@@ -46,40 +46,55 @@ export default function HomePage() {
 
   return (
     <div className='space-y-6'>
-      <div className='relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/25 via-fuchsia-500/20 to-cyan-500/25 p-[1px]'>
-        <motion.div
-          aria-hidden
-          className='pointer-events-none absolute -inset-24 opacity-70'
-          animate={{ rotate: [0, 6, 0], scale: [1, 1.02, 1] }}
-          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-          style={{
-            background:
-              'radial-gradient(closest-side, rgba(99,102,241,0.18), transparent 70%), radial-gradient(closest-side, rgba(236,72,153,0.16), transparent 70%), radial-gradient(closest-side, rgba(34,211,238,0.16), transparent 70%)',
-          }}
-        />
+      {/* Hero Section - ThemeForest Style */}
+      <div className='bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24'>
+          <div className='max-w-3xl'>
+            <h1 className='text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4'>
+              Premium Digital Templates
+            </h1>
+            <p className='text-lg sm:text-xl text-white/90 mb-8'>
+              Discover thousands of professionally designed templates for
+              websites, apps, and more. Start your next project with confidence.
+            </p>
+            <div className='flex flex-col sm:flex-row gap-4'>
+              <Link
+                href='/templates'
+                className='inline-flex items-center justify-center rounded-lg bg-white text-indigo-600 px-8 py-3 text-base font-bold hover:bg-gray-100 transition-colors'
+              >
+                Browse Templates
+              </Link>
+              <Link
+                href='/creators'
+                className='inline-flex items-center justify-center rounded-lg border-2 border-white text-white px-8 py-3 text-base font-bold hover:bg-white/10 transition-colors'
+              >
+                Become a Creator
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <div className='relative rounded-3xl border border-white/40 bg-white/50 p-6 shadow-sm backdrop-blur-xl'>
-          <h1 className='text-3xl font-extrabold tracking-tight text-indigo-950 sm:text-4xl'>
-            Discover templates with a modern experience
-          </h1>
-          <p className='mt-2 max-w-2xl text-sm font-semibold text-indigo-900/80'>
-            Search, sort, and explore ready-to-use templates with smooth
-            animations and a colorful UI.
-          </p>
-
-          <div className='mt-5 flex flex-col gap-3 sm:flex-row'>
-            <Link
-              href='/creators'
-              className='inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-fuchsia-600 via-indigo-600 to-cyan-500 px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:opacity-95'
-            >
-              Explore creators
-            </Link>
-            <Link
-              href='/about'
-              className='inline-flex items-center justify-center rounded-2xl border border-white/50 bg-white/60 px-5 py-3 text-sm font-extrabold text-indigo-950 shadow-sm transition hover:bg-white'
-            >
-              About this project
-            </Link>
+      {/* Stats Bar */}
+      <div className='bg-gray-50 border-b border-gray-200'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+          <div className='grid grid-cols-2 md:grid-cols-4 gap-8'>
+            <div className='text-center'>
+              <div className='text-3xl font-bold text-gray-900'>10K+</div>
+              <div className='text-sm text-gray-600'>Templates</div>
+            </div>
+            <div className='text-center'>
+              <div className='text-3xl font-bold text-gray-900'>500+</div>
+              <div className='text-sm text-gray-600'>Creators</div>
+            </div>
+            <div className='text-center'>
+              <div className='text-3xl font-bold text-gray-900'>50K+</div>
+              <div className='text-sm text-gray-600'>Downloads</div>
+            </div>
+            <div className='text-center'>
+              <div className='text-3xl font-bold text-gray-900'>4.9</div>
+              <div className='text-sm text-gray-600'>Avg Rating</div>
+            </div>
           </div>
         </div>
       </div>
