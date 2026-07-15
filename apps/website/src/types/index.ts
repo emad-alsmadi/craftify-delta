@@ -9,7 +9,7 @@ export interface Creator {
 export interface Template {
   _id: string;
   title: string;
-  author: Creator | string;
+  creator: Creator | string;
   description: string;
   price: number;
   cover: string;
@@ -127,7 +127,7 @@ export interface AdminUser {
 
 export type TemplatePayload = {
   title: string;
-  author: string;
+  creator: string;
   description: string;
   price: number;
   cover: string;

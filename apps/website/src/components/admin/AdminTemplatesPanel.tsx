@@ -32,20 +32,20 @@ import {
 
 const emptyForm: TemplatePayload = {
   title: '',
-  author: '',
+  creator: '',
   description: '',
   price: 0,
   cover: '',
 };
 
-function authorId(template: Template): string {
-  if (typeof template.author === 'string') return template.author;
-  return template.author?._id || '';
+function creatorId(template: Template): string {
+  if (typeof template.creator === 'string') return template.creator;
+  return template.creator?._id || '';
 }
 
-function authorName(template: Template): string {
-  if (typeof template.author === 'object' && template.author?.name) {
-    return template.author.name;
+function creatorName(template: Template): string {
+  if (typeof template.creator === 'object' && template.creator?.name) {
+    return template.creator.name;
   }
   return '—';
 }
@@ -69,14 +69,11 @@ export function AdminTemplatesPanel() {
   const modalTitle = editing ? 'Edit template' : 'Create template';
   const saving = createMut.isPending || updateMut.isPending;
 
-  const defaultAuthor = useMemo(
-    () => creators[0]?._id || '',
-    [creators],
-  );
+  const defaultCreator = useMemo(() => creators[0]?._id || '', [creators]);
 
   function openCreate() {
     setEditing(null);
-    setForm({ ...emptyForm, author: defaultAuthor });
+    setForm({ ...emptyForm, creator: defaultCreator });
     setOpen(true);
   }
 
@@ -84,7 +81,7 @@ export function AdminTemplatesPanel() {
     setEditing(template);
     setForm({
       title: template.title,
-      author: authorId(template),
+      creator: creatorId(template),
       description: template.description,
       price: template.price,
       cover: template.cover,
@@ -99,7 +96,7 @@ export function AdminTemplatesPanel() {
   }
 
   async function handleSubmit() {
-    if (!form.title.trim() || !form.author || !form.cover.trim()) {
+    if (!form.title.trim() || !form.creator || !form.cover.trim()) {
       toast('Title, creator, and cover URL are required.', {
         title: 'Validation',
         variant: 'error',
@@ -195,7 +192,7 @@ export function AdminTemplatesPanel() {
                 {t.title}
               </td>
               <td className='px-4 py-3 font-semibold text-indigo-950/75'>
-                {authorName(t)}
+                {creatorName(t)}
               </td>
               <td className='px-4 py-3 font-semibold text-indigo-950/75'>
                 ${t.price.toFixed(2)}
@@ -244,9 +241,9 @@ export function AdminTemplatesPanel() {
         </AdminField>
         <AdminField label='Creator'>
           <AdminSelect
-            value={form.author}
+            value={form.creator}
             onChange={(e) =>
-              setForm((f) => ({ ...f, author: e.target.value }))
+              setForm((f) => ({ ...f, creator: e.target.value }))
             }
           >
             <option value=''>Select creator</option>

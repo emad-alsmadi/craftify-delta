@@ -14,9 +14,9 @@ export function WishlistCard({ item }: WishlistCardProps) {
   const template = item.template;
   if (!template) return null;
   const creatorName =
-    typeof template.auther === 'string'
-      ? template.auther
-      : template.auther.name;
+    typeof template.creator === 'string'
+      ? template.creator
+      : template.creator.name;
 
   return (
     <motion.div

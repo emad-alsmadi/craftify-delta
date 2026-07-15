@@ -14,9 +14,9 @@ interface TemplateCardProps {
 
 export function TemplateCard({ template }: TemplateCardProps) {
   const creatorName =
-    typeof template.author === 'string'
-      ? template.author
-      : template.author.name;
+    typeof template.creator === 'string'
+      ? template.creator
+      : template.creator.name;
 
   return (
     <motion.div

@@ -673,6 +673,81 @@ export const downloadsApi = {
 };
 
 /**
+ * Licenses API - Handles license type and purchased license operations
+ */
+export const licensesApi = {
+  /**
+   * Fetch all active license types
+   * @returns Array of license types
+   */
+  getLicenseTypes: async (): Promise<any[]> => {
+    const { data } = await api.get(endpoints.licenses.list);
+    return data;
+  },
+  /**
+   * Fetch a specific license type by slug
+   * @param slug - License type slug
+   * @returns License type details
+   */
+  getLicenseTypeBySlug: async (slug: string): Promise<any> => {
+    const { data } = await api.get(endpoints.licenses.details(slug));
+    return data;
+  },
+  /**
+   * Calculate price for a template with specific license type
+   * @param templateId - Template ID
+   * @param licenseSlug - License type slug
+   * @returns Calculated price details
+   */
+  calculatePrice: async (
+    templateId: string,
+    licenseSlug: string,
+  ): Promise<{
+    basePrice: number;
+    licenseType: string;
+    priceMultiplier: number;
+    finalPrice: number;
+  }> => {
+    const { data } = await api.get(endpoints.licenses.calculatePrice, {
+      params: { templateId, licenseSlug },
+    });
+    return data;
+  },
+  /**
+   * Validate a license key
+   * @param licenseKey - License key to validate
+   * @param templateId - Optional template ID
+   * @returns Validation result
+   */
+  validateLicense: async (
+    licenseKey: string,
+    templateId?: string,
+  ): Promise<{
+    valid: boolean;
+    license?: {
+      type: string;
+      template: any;
+      expiryDate: string;
+    };
+  }> => {
+    const { data } = await api.post(endpoints.licenses.validate, {
+      licenseKey,
+      templateId,
+    });
+    return data;
+  },
+  /**
+   * Fetch user's purchased licenses
+   * @param userId - User ID
+   * @returns Array of purchased licenses
+   */
+  getUserLicenses: async (userId: string): Promise<any[]> => {
+    const { data } = await api.get(endpoints.licenses.myPurchases(userId));
+    return data;
+  },
+};
+
+/**
  * Re-export commonly used types for convenience
  */
 export type { TemplatesResponse, TemplatesQuery };

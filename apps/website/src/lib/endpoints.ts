@@ -74,4 +74,11 @@ export const endpoints = {
     download: (id: string) => `/downloads/${id}/download`,
     delete: (id: string) => `/downloads/${id}`,
   },
+  licenses: {
+    list: '/licenses',
+    details: (slug: string) => `/licenses/${slug}`,
+    calculatePrice: '/licenses/calculate-price',
+    validate: '/licenses/validate',
+    myPurchases: (userId: string) => `/licenses/purchases/${userId}`,
+  },
 } as const;
