@@ -24,6 +24,10 @@ import {
   Menu,
   X,
   Globe,
+  MoreHorizontal,
+  FileText,
+  HelpCircle,
+  Scale,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLogout, useMe } from '@/hooks/auth/authQuery';
@@ -37,7 +41,6 @@ export const navItems = [
   { href: '/creators', label: 'Creators', icon: Users },
   { href: '/pricing', label: 'Pricing', icon: Sparkles },
   { href: '/cart', label: 'Cart', icon: ShoppingCart },
-  { href: '/about', label: 'About', icon: Info },
 ];
 
 export const categories = [
@@ -256,16 +259,19 @@ export function Navbar() {
             <nav className='hidden md:flex items-center gap-6'>
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
-                  <button className='flex items-center gap-1 text-gray-700 hover:text-gray-900 font-medium transition-colors'>
-                    Categories
-                    <ChevronDown className='h-4 w-4' />
+                  <button className='flex items-center gap-1 text-gray-700 hover:text-gray-900 font-medium transition-colors group relative'>
+                    <span className='relative'>
+                      Categories
+                      <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full'></span>
+                    </span>
+                    <ChevronDown className='h-4 w-4 transition-transform duration-300 group-hover:rotate-180' />
                   </button>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Portal>
                   <DropdownMenu.Content
                     align='start'
                     sideOffset={10}
-                    className='z-50 min-w-[400px] overflow-hidden rounded-lg border border-gray-200 bg-white shadow-xl'
+                    className='z-50 min-w-[400px] overflow-hidden rounded-lg border border-gray-200 bg-white shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2'
                   >
                     <div className='p-4'>
                       <div className='grid grid-cols-2 gap-4'>
@@ -322,6 +328,72 @@ export function Navbar() {
               >
                 Pricing
               </Link>
+
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger asChild>
+                  <button className='flex items-center gap-1 text-gray-700 hover:text-gray-900 font-medium transition-colors'>
+                    More
+                    <ChevronDown className='h-4 w-4' />
+                  </button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Portal>
+                  <DropdownMenu.Content
+                    align='start'
+                    sideOffset={10}
+                    className='z-50 min-w-[200px] overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg'
+                  >
+                    <DropdownMenu.Item asChild>
+                      <Link
+                        href='/about'
+                        className='flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors'
+                      >
+                        <Info className='h-4 w-4' />
+                        About
+                      </Link>
+                    </DropdownMenu.Item>
+
+                    <DropdownMenu.Item asChild>
+                      <Link
+                        href='/contact'
+                        className='flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors'
+                      >
+                        <MessageSquare className='h-4 w-4' />
+                        Contact
+                      </Link>
+                    </DropdownMenu.Item>
+
+                    <DropdownMenu.Item asChild>
+                      <Link
+                        href='/faq'
+                        className='flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors'
+                      >
+                        <HelpCircle className='h-4 w-4' />
+                        FAQ
+                      </Link>
+                    </DropdownMenu.Item>
+
+                    <DropdownMenu.Item asChild>
+                      <Link
+                        href='/licenses'
+                        className='flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors'
+                      >
+                        <FileText className='h-4 w-4' />
+                        Licenses
+                      </Link>
+                    </DropdownMenu.Item>
+
+                    <DropdownMenu.Item asChild>
+                      <Link
+                        href='/terms'
+                        className='flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors'
+                      >
+                        <Scale className='h-4 w-4' />
+                        Terms
+                      </Link>
+                    </DropdownMenu.Item>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Portal>
+              </DropdownMenu.Root>
             </nav>
 
             {/* Right side */}
@@ -537,6 +609,41 @@ export function Navbar() {
               >
                 Pricing
               </Link>
+              <div className='px-4 py-2 text-medium text-gray-900 font-semibold'>
+                More
+              </div>
+              <div className='pl-8 space-y-2'>
+                <Link
+                  href='/about'
+                  className='block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg'
+                >
+                  About
+                </Link>
+                <Link
+                  href='/contact'
+                  className='block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg'
+                >
+                  Contact
+                </Link>
+                <Link
+                  href='/faq'
+                  className='block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg'
+                >
+                  FAQ
+                </Link>
+                <Link
+                  href='/licenses'
+                  className='block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg'
+                >
+                  Licenses
+                </Link>
+                <Link
+                  href='/terms'
+                  className='block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg'
+                >
+                  Terms
+                </Link>
+              </div>
               <div className='px-4 py-2 text-medium text-gray-900 font-semibold'>
                 Categories
               </div>
