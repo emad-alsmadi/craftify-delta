@@ -7,6 +7,7 @@ import { WishlistButton } from '@/components/page/wishlist/WishlistButton';
 import { StarRating } from '@/components/page/rating/StarRating';
 import { ReviewForm } from '@/components/page/review/ReviewForm';
 import { ReviewList } from '@/components/page/review/ReviewList';
+import { RelatedTemplates } from '@/components/templates/RelatedTemplates';
 import { useToast } from '@/components/ui/Toast';
 import {
   Loader2,
@@ -91,13 +92,13 @@ export default function TemplateDetailPage() {
   const creatorName =
     typeof template.creator === 'string'
       ? template.creator
-      : template.creator.name;
+      : template.creator?.name || 'Unknown Creator';
   const creatorCountry =
     typeof template.creator === 'string'
       ? null
-      : template.creator.country || null;
+      : template.creator?.country || null;
   const creatorBio =
-    typeof template.creator === 'string' ? null : template.creator.bio || null;
+    typeof template.creator === 'string' ? null : template.creator?.bio || null;
 
   const handleAddToCart = () => {
     cart.addToCart({
@@ -166,6 +167,80 @@ export default function TemplateDetailPage() {
       });
     }
   };
+
+  // Mock related templates
+  const relatedTemplates: Template[] = [
+    {
+      _id: 'related-1',
+      title: 'Modern Corporate Theme',
+      description: 'A professional corporate theme for businesses',
+      price: 49.99,
+      cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800',
+      creator: {
+        name: 'Jane Smith',
+        _id: 'creator-1',
+        country: 'USA',
+        bio: 'Expert designer',
+      },
+      averageRating: 4.5,
+      reviewCount: 23,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      _id: 'related-2',
+      title: 'Creative Portfolio',
+      description: 'Showcase your work with style',
+      price: 39.99,
+      cover:
+        'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800',
+      creator: {
+        name: 'Mike Johnson',
+        _id: 'creator-2',
+        country: 'UK',
+        bio: 'Creative director',
+      },
+      averageRating: 4.8,
+      reviewCount: 45,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      _id: 'related-3',
+      title: 'E-commerce Store',
+      description: 'Complete online store solution',
+      price: 59.99,
+      cover: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
+      creator: {
+        name: 'Sarah Wilson',
+        _id: 'creator-3',
+        country: 'Canada',
+        bio: 'E-commerce expert',
+      },
+      averageRating: 4.6,
+      reviewCount: 67,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      _id: 'related-4',
+      title: 'Blog Template',
+      description: 'Clean and modern blog design',
+      price: 29.99,
+      cover:
+        'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800',
+      creator: {
+        name: 'Tom Brown',
+        _id: 'creator-4',
+        country: 'Australia',
+        bio: 'Content creator',
+      },
+      averageRating: 4.3,
+      reviewCount: 31,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+  ];
 
   return (
     <div className='relative overflow-hidden rounded-3xl border border-white/25 bg-white/20 p-4 backdrop-blur-xl sm:p-6'>
@@ -285,7 +360,7 @@ export default function TemplateDetailPage() {
 
               <div className='mt-6 grid gap-3 sm:grid-cols-2'>
                 <Button
-                  className='w-full rounded-full bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-cyan-500 text-white shadow-md transition hover:brightness-110 active:brightness-95'
+                  className='w-full rounded-full bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white shadow-md transition hover:brightness-110 active:brightness-95'
                   size='lg'
                   onClick={handleAddToCart}
                 >
@@ -358,7 +433,7 @@ export default function TemplateDetailPage() {
 
                   {typeof template.creator !== 'string' && (
                     <Link
-                      href={`/creators/${template.creator._id}`}
+                      href={`/creators/${template.creator?._id}`}
                       className='inline-flex items-center justify-center rounded-full border border-white/35 bg-white/40 px-4 py-2 text-sm font-extrabold text-indigo-950 transition hover:bg-white/55'
                     >
                       Open creator profile
@@ -382,7 +457,7 @@ export default function TemplateDetailPage() {
             {token && !myReview && !showReviewForm && (
               <Button
                 onClick={() => setShowReviewForm(true)}
-                className='rounded-full bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-cyan-500 text-white'
+                className='rounded-full bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white'
               >
                 Write a Review
               </Button>
@@ -425,6 +500,12 @@ export default function TemplateDetailPage() {
             isDeleting={deleteReviewMutation.isPending}
           />
         </motion.section>
+
+        {/* Related Templates */}
+        <RelatedTemplates
+          templates={relatedTemplates}
+          loading={false}
+        />
       </div>
     </div>
   );

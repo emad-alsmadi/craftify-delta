@@ -47,7 +47,7 @@ export default function WishlistPage() {
       <div className='flex items-center gap-3'>
         <div className='rounded-full bg-gradient-to-br from-fuchsia-500/20 via-indigo-500/20 to-cyan-500/20 p-3'>
           <Heart
-            className='h-6 w-6 text-indigo-600'
+            className='h-6 w-6 text-fuchsia-600'
             fill='none'
             strokeWidth={2}
           />
