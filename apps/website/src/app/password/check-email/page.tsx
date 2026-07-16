@@ -53,8 +53,8 @@ function CheckYourEmailContent() {
 
           <div className='mt-6 rounded-2xl border border-white/35 bg-white/45 p-4'>
             <div className='flex items-start gap-3'>
-              <div className='mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-600/10'>
-                <Mail className='h-5 w-5 text-indigo-700' />
+              <div className='mt-0.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-fuchsia-600/10'>
+                <Mail className='h-5 w-5 text-fuchsia-700' />
               </div>
               <div className='min-w-0'>
                 <div className='text-sm font-extrabold text-indigo-950'>
@@ -79,7 +79,7 @@ function CheckYourEmailContent() {
           <div className='mt-8 flex flex-wrap items-center gap-3'>
             <Link
               href='/auth/login'
-              className='rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-extrabold text-white shadow-sm transition hover:bg-indigo-700'
+              className='rounded-full bg-fuchsia-600 px-6 py-2.5 text-sm font-extrabold text-white shadow-sm transition hover:bg-fuchsia-700'
             >
               Back to login
             </Link>

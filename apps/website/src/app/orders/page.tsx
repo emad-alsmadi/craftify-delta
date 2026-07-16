@@ -117,7 +117,7 @@ export default function OrdersPage() {
 
       {orders.length === 0 ? (
         <div className='rounded-3xl border border-white/40 bg-white/50 p-8 text-center shadow-sm backdrop-blur-xl'>
-          <div className='mx-auto inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-600 via-fuchsia-600 to-cyan-500 text-white shadow-sm'>
+          <div className='mx-auto inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-gradient-to-br from-fuchsia-600 via-purple-600 to-cyan-500 text-white shadow-sm'>
             <Receipt className='h-6 w-6' />
           </div>
           <div className='mt-4 text-lg font-extrabold text-indigo-950'>
@@ -129,7 +129,7 @@ export default function OrdersPage() {
           <div className='mt-6 flex justify-center'>
             <Link
               href='/'
-              className='inline-flex items-center justify-center rounded-full bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-cyan-500 px-5 py-3 text-sm font-extrabold text-white shadow-md transition hover:brightness-110'
+              className='inline-flex items-center justify-center rounded-full bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 px-5 py-3 text-sm font-extrabold text-white shadow-md transition hover:brightness-110'
             >
               Browse templates
             </Link>

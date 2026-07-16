@@ -4,14 +4,13 @@ import { useRouter } from 'next/navigation';
 import type { TemplatesQuery } from '@/types';
 import { useTemplates } from '@/hooks/templates/templatesQuery';
 import { HeroSection } from '@/components/home/HeroSection';
-import { FeaturedCategories } from '@/components/home/FeaturedCategories';
-import { WhyChooseUs } from '@/components/home/WhyChooseUs';
-import { StatsBar } from '@/components/home/StatsBar';
 import { TrendingTemplates } from '@/components/home/TrendingTemplates';
 import { NewArrivals } from '@/components/home/NewArrivals';
 import { Testimonials } from '@/components/home/Testimonials';
 import { TopCreators } from '@/components/home/TopCreators';
 import { CTASection } from '@/components/home/CTASection';
+import { BestSellingTemplates } from '@/components/home/BestSellingTemplates';
+import { PopularCategories } from '@/components/home/PopularCategories';
 
 export default function HomePage() {
   const router = useRouter();
@@ -64,11 +63,7 @@ export default function HomePage() {
         onSearchSubmit={handleSearch}
       />
 
-      <FeaturedCategories />
-
-      <WhyChooseUs />
-
-      <StatsBar />
+      <PopularCategories />
 
       <TrendingTemplates
         templates={data?.data || []}
@@ -86,11 +81,19 @@ export default function HomePage() {
         itemVariants={itemVariants}
       />
 
+      <BestSellingTemplates
+        templates={data?.data || []}
+        loading={loading}
+        error={error}
+        gridVariants={gridVariants}
+        itemVariants={itemVariants}
+      />
+
+      <TopCreators />
+
       <Testimonials />
 
       <CTASection />
-      
-      <TopCreators />
     </div>
   );
 }

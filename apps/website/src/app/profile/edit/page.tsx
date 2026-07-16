@@ -73,8 +73,7 @@ export default function EditProfilePage() {
             void confirm({
               variant: 'warning',
               title: 'Discard your changes?',
-              description:
-                'You have unsaved edits. Leave without saving?',
+              description: 'You have unsaved edits. Leave without saving?',
               confirmLabel: 'Discard',
               cancelLabel: 'Keep editing',
               onConfirm: async () => {
@@ -175,7 +174,7 @@ export default function EditProfilePage() {
 
             <Button
               type='submit'
-              className='w-full rounded-full bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-cyan-500 text-white shadow-md transition hover:brightness-110 active:brightness-95 disabled:opacity-60'
+              className='w-full rounded-full bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white shadow-md transition hover:brightness-110 active:brightness-95 disabled:opacity-60'
               size='lg'
               disabled={isSubmitting}
             >

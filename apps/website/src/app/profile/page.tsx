@@ -76,7 +76,7 @@ export default function ProfilePage() {
             <motion.div
               whileHover={{ rotate: 2, y: -2 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className='inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-600 via-fuchsia-600 to-cyan-500 text-white shadow-sm'
+              className='inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-3xl bg-gradient-to-br from-fuchsia-600 via-purple-600 to-cyan-500 text-white shadow-sm'
             >
               <User className='h-6 w-6' />
             </motion.div>
@@ -125,8 +125,7 @@ export default function ProfilePage() {
             ) : sub.data ? (
               <div className='mt-4 space-y-2'>
                 <div className='text-sm font-extrabold text-indigo-950'>
-                  Status:{' '}
-                  <span className='capitalize'>{sub.data.status}</span>
+                  Status: <span className='capitalize'>{sub.data.status}</span>
                 </div>
                 {sub.data.currentPeriodEnd ? (
                   <div className='text-xs font-semibold text-indigo-950/75'>
@@ -194,7 +193,7 @@ export default function ProfilePage() {
             </Button>
 
             <Button
-              className='w-full rounded-full bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-cyan-500 text-white shadow-md transition hover:brightness-110 active:brightness-95'
+              className='w-full rounded-full bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white shadow-md transition hover:brightness-110 active:brightness-95'
               size='lg'
               onClick={() => router.push('/profile/edit')}
             >

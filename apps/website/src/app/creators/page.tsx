@@ -31,7 +31,7 @@ export default function AuthorsPage() {
   if (loading) {
     return (
       <div className='flex items-center justify-center rounded-2xl border border-white/60 bg-white/70 p-10 shadow-sm backdrop-blur'>
-        <Loader2 className='h-6 w-6 animate-spin text-indigo-600' />
+        <Loader2 className='h-6 w-6 animate-spin text-fuchsia-600' />
       </div>
     );
   }
@@ -98,7 +98,7 @@ export default function AuthorsPage() {
             </p>
             {creatorsQuery.isFetching && (
               <div className='inline-flex items-center gap-2 text-xs font-extrabold text-indigo-950/70'>
-                <Loader2 className='h-4 w-4 animate-spin text-indigo-600' />
+                <Loader2 className='h-4 w-4 animate-spin text-fuchsia-600' />
                 Loading...
               </div>
             )}
