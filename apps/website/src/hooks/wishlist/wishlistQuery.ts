@@ -4,8 +4,8 @@ import type { WishlistItem } from '@/types';
 
 export const WISHLIST_MY_KEY = ['wishlist', 'my'] as const;
 
-export function wishlistCheckKey(templateId: string) {
-  return ['wishlist', 'check', templateId] as const;
+export function wishlistCheckKey(productId: string) {
+  return ['wishlist', 'check', productId] as const;
 }
 
 export function useMyWishlist() {
@@ -19,14 +19,16 @@ export function useMyWishlist() {
   });
 }
 
-export function useCheckWishlist(templateId?: string) {
+export function useCheckWishlist(productId?: string) {
   return useQuery<{ isWishlisted: boolean }>({
-    queryKey: templateId ? wishlistCheckKey(templateId) : ['wishlist', 'check', 'missing'],
+    queryKey: productId
+      ? wishlistCheckKey(productId)
+      : ['wishlist', 'check', 'missing'],
     queryFn: async () => {
-      if (!templateId) throw new Error('Missing template id');
-      return await wishlistApi.checkWishlist(templateId);
+      if (!productId) throw new Error('Missing product id');
+      return await wishlistApi.checkWishlist(productId);
     },
-    enabled: Boolean(templateId),
+    enabled: Boolean(productId),
     staleTime: 30_000,
     retry: 1,
   });
@@ -36,27 +38,27 @@ export function useAddToWishlistMutation() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (templateId: string) => {
-      return await wishlistApi.addToWishlist(templateId);
+    mutationFn: async (productId: string) => {
+      return await wishlistApi.addToWishlist(productId);
     },
-    onMutate: async (templateId) => {
+    onMutate: async (productId) => {
       // Cancel outgoing refetches
       await qc.cancelQueries({ queryKey: WISHLIST_MY_KEY });
-      await qc.cancelQueries({ queryKey: wishlistCheckKey(templateId) });
+      await qc.cancelQueries({ queryKey: wishlistCheckKey(productId) });
 
       // Snapshot previous values
       const previousWishlist = qc.getQueryData(WISHLIST_MY_KEY);
-      const previousCheck = qc.getQueryData(wishlistCheckKey(templateId));
+      const previousCheck = qc.getQueryData(wishlistCheckKey(productId));
 
       // Optimistically update check query
-      qc.setQueryData(wishlistCheckKey(templateId), { isWishlisted: true });
+      qc.setQueryData(wishlistCheckKey(productId), { isWishlisted: true });
 
       return { previousWishlist, previousCheck };
     },
-    onError: (err, templateId, context) => {
+    onError: (err, productId, context) => {
       // Rollback on error
       if (context?.previousCheck) {
-        qc.setQueryData(wishlistCheckKey(templateId), context.previousCheck);
+        qc.setQueryData(wishlistCheckKey(productId), context.previousCheck);
       }
     },
     onSuccess: async () => {
@@ -70,27 +72,27 @@ export function useRemoveFromWishlistMutation() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (templateId: string) => {
-      return await wishlistApi.removeFromWishlist(templateId);
+    mutationFn: async (productId: string) => {
+      return await wishlistApi.removeFromWishlist(productId);
     },
-    onMutate: async (templateId) => {
+    onMutate: async (productId) => {
       // Cancel outgoing refetches
       await qc.cancelQueries({ queryKey: WISHLIST_MY_KEY });
-      await qc.cancelQueries({ queryKey: wishlistCheckKey(templateId) });
+      await qc.cancelQueries({ queryKey: wishlistCheckKey(productId) });
 
       // Snapshot previous values
       const previousWishlist = qc.getQueryData(WISHLIST_MY_KEY);
-      const previousCheck = qc.getQueryData(wishlistCheckKey(templateId));
+      const previousCheck = qc.getQueryData(wishlistCheckKey(productId));
 
       // Optimistically update check query
-      qc.setQueryData(wishlistCheckKey(templateId), { isWishlisted: false });
+      qc.setQueryData(wishlistCheckKey(productId), { isWishlisted: false });
 
       return { previousWishlist, previousCheck };
     },
-    onError: (err, templateId, context) => {
+    onError: (err, productId, context) => {
       // Rollback on error
       if (context?.previousCheck) {
-        qc.setQueryData(wishlistCheckKey(templateId), context.previousCheck);
+        qc.setQueryData(wishlistCheckKey(productId), context.previousCheck);
       }
     },
     onSuccess: async () => {

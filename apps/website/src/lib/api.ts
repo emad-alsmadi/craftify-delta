@@ -1,23 +1,13 @@
 import axios from 'axios';
 import {
-  TemplatesResponse,
-  TemplatesQuery,
-  Template,
-  Creator,
-  CreatorsResponse,
-  CreatorsQuery,
+  ProductsQuery,
   Order,
-  SubscriptionRecord,
   AdminUser,
-  TemplatePayload,
-  CreatorPayload,
   UserUpdatePayload,
   WishlistItem,
   Review,
   ReviewPayload,
   ReviewUpdatePayload,
-  Download,
-  DownloadPayload,
   Coupon,
   CouponsResponse,
   CouponPayload,
@@ -25,7 +15,6 @@ import {
   CouponValidationResponse,
 } from '@/types';
 import { getAuthToken } from '@/lib/authCookies';
-import { endpoints } from '@/lib/endpoints';
 
 /**
  * Normalizes the API base URL to ensure it ends with /api
@@ -107,51 +96,25 @@ api.interceptors.response.use(
 );
 
 /**
- * Templates API - Handles template-related operations
+ * Products API - Handles product-related operations
  */
-export const templatesApi = {
+export const productsApi = {
   /**
-   * Fetch a paginated list of templates with optional filters
+   * Fetch a paginated list of products with optional filters
    * @param params - Query parameters for filtering and pagination
-   * @returns Paginated templates response
+   * @returns Paginated products response
    */
-  getTemplates: async (
-    params: TemplatesQuery = {},
-  ): Promise<TemplatesResponse> => {
-    const { data } = await api.get(endpoints.templates.list, { params });
+  getProducts: async (params: ProductsQuery = {}): Promise<any> => {
+    const { data } = await api.get('/products', { params });
     return data;
   },
   /**
-   * Fetch a single template by ID
-   * @param id - Template ID
-   * @returns Template details
+   * Fetch a single product by ID
+   * @param id - Product ID
+   * @returns Product details
    */
-  getTemplateById: async (id: string): Promise<Template> => {
-    const { data } = await api.get(endpoints.templates.details(id));
-    return data;
-  },
-};
-
-/**
- * Creators API - Handles creator/author-related operations
- */
-export const authorsApi = {
-  /**
-   * Fetch a paginated list of creators with optional filters
-   * @param params - Query parameters for filtering and pagination
-   * @returns Paginated creators response
-   */
-  getAuthors: async (params: CreatorsQuery = {}): Promise<CreatorsResponse> => {
-    const { data } = await api.get(endpoints.creators.list, { params });
-    return data;
-  },
-  /**
-   * Fetch a single creator by ID
-   * @param id - Creator ID
-   * @returns Creator details
-   */
-  getAuthorById: async (id: string): Promise<any> => {
-    const { data } = await api.get(endpoints.creators.details(id));
+  getProductById: async (id: string): Promise<any> => {
+    const { data } = await api.get(`/products/${id}`);
     return data;
   },
 };
@@ -326,156 +289,36 @@ export const paymentsApi = {
 };
 
 /**
- * Subscription setup status type
+ * Order checkout payload type
  */
-export type SubscriptionSetupStatus = {
-  ready: boolean;
-  stripeSecretConfigured: boolean;
-  subscriptionPriceConfigured: boolean;
+export type OrderCheckoutPayload = {
+  items: {
+    productId: string;
+    qty: number;
+    variant?: { size?: string; color?: string };
+  }[];
+  shippingAddress: {
+    name: string;
+    phone: string;
+    address: string;
+    city: string;
+    zip: string;
+    notes?: string;
+  };
+  shippingPrice?: number;
+  taxPrice?: number;
 };
 
 /**
- * Subscriptions API - Handles Stripe subscription operations
- */
-export const subscriptionsApi = {
-  /**
-   * Check if subscription setup is configured
-   * @returns Setup status with configuration flags
-   */
-  getSetupStatus: async (): Promise<SubscriptionSetupStatus> => {
-    const { data } = await api.get(endpoints.subscriptions.setupStatus);
-    return data;
-  },
-  /**
-   * Create a Stripe checkout session for subscription
-   * @returns Checkout session URL
-   */
-  createCheckoutSession: async (): Promise<{ url: string }> => {
-    const { data } = await api.post(endpoints.subscriptions.checkoutSession);
-    return data;
-  },
-  /**
-   * Create a Stripe customer portal session for managing subscription
-   * @returns Portal session URL
-   */
-  createPortalSession: async (): Promise<{ url: string }> => {
-    const { data } = await api.post(endpoints.subscriptions.portal);
-    return data;
-  },
-  /**
-   * Fetch current user's subscription
-   * @returns User's subscription record or null if not subscribed
-   */
-  getMine: async (): Promise<SubscriptionRecord | null> => {
-    const { data } = await api.get(endpoints.subscriptions.mine);
-    return data;
-  },
-};
-
-/**
- * Admin API - Handles administrative operations for templates, creators, and users
+ * Admin API - Handles administrative operations for products, brands, and users
  */
 export const adminApi = {
-  /**
-   * Fetch templates with admin-level access
-   * @param params - Query parameters for filtering and pagination
-   * @returns Paginated templates response
-   */
-  getTemplates: async (
-    params: TemplatesQuery = {},
-  ): Promise<TemplatesResponse> => {
-    const { data } = await api.get(endpoints.admin.templates.list, {
-      params: { limit: 100, sort: '-createdAt', ...params },
-    });
-    return data;
-  },
-  /**
-   * Create a new template
-   * @param payload - Template creation data
-   * @returns Created template details
-   */
-  createTemplate: async (payload: TemplatePayload): Promise<Template> => {
-    const { data } = await api.post(endpoints.admin.templates.create, payload);
-    return data;
-  },
-  /**
-   * Update an existing template
-   * @param id - Template ID
-   * @param payload - Partial template update data
-   * @returns Updated template details
-   */
-  updateTemplate: async (
-    id: string,
-    payload: Partial<TemplatePayload>,
-  ): Promise<Template> => {
-    const { data } = await api.put(
-      endpoints.admin.templates.update(id),
-      payload,
-    );
-    return data;
-  },
-  /**
-   * Delete a template
-   * @param id - Template ID
-   * @returns Deletion confirmation message
-   */
-  deleteTemplate: async (id: string): Promise<{ message: string }> => {
-    const { data } = await api.delete(endpoints.admin.templates.delete(id));
-    return data;
-  },
-  /**
-   * Fetch creators with admin-level access
-   * @param params - Query parameters for filtering and pagination
-   * @returns Paginated creators response
-   */
-  getCreators: async (
-    params: CreatorsQuery = {},
-  ): Promise<CreatorsResponse> => {
-    const { data } = await api.get(endpoints.admin.creators.list, {
-      params: { limit: 100, ...params },
-    });
-    return data;
-  },
-  /**
-   * Create a new creator
-   * @param payload - Creator creation data
-   * @returns Created creator details
-   */
-  createCreator: async (payload: CreatorPayload): Promise<Creator> => {
-    const { data } = await api.post(endpoints.admin.creators.create, payload);
-    return data;
-  },
-  /**
-   * Update an existing creator
-   * @param id - Creator ID
-   * @param payload - Partial creator update data
-   * @returns Updated creator details
-   */
-  updateCreator: async (
-    id: string,
-    payload: Partial<CreatorPayload>,
-  ): Promise<Creator> => {
-    const { data } = await api.put(
-      endpoints.admin.creators.update(id),
-      payload,
-    );
-    return data;
-  },
-  /**
-   * Delete a creator
-   * @param id - Creator ID
-   * @returns Deletion confirmation message
-   */
-  deleteCreator: async (id: string): Promise<{ message: string }> => {
-    const { data } = await api.delete(endpoints.admin.creators.delete(id));
-    return data;
-  },
   /**
    * Fetch all users (admin only)
    * @returns Array of users
    */
   getUsers: async (): Promise<AdminUser[]> => {
-    const { data } = await api.get(endpoints.admin.users.list);
+    const { data } = await api.get('/users');
     return data;
   },
   /**
@@ -484,7 +327,7 @@ export const adminApi = {
    * @returns User details
    */
   getUserById: async (id: string): Promise<AdminUser> => {
-    const { data } = await api.get(endpoints.admin.users.details(id));
+    const { data } = await api.get(`/users/${id}`);
     return data;
   },
   /**
@@ -497,7 +340,7 @@ export const adminApi = {
     id: string,
     payload: UserUpdatePayload,
   ): Promise<{ message: string; updatedUser: AdminUser }> => {
-    const { data } = await api.put(endpoints.admin.users.update(id), payload);
+    const { data } = await api.put(`/users/${id}`, payload);
     return data;
   },
   /**
@@ -506,7 +349,7 @@ export const adminApi = {
    * @returns Deletion confirmation message
    */
   deleteUser: async (id: string): Promise<{ message: string }> => {
-    const { data } = await api.delete(endpoints.admin.users.delete(id));
+    const { data } = await api.delete(`/users/${id}`);
     return data;
   },
   /**
@@ -517,7 +360,7 @@ export const adminApi = {
   getCoupons: async (
     params: { page?: number; limit?: number } = {},
   ): Promise<CouponsResponse> => {
-    const { data } = await api.get(endpoints.admin.coupons.list, {
+    const { data } = await api.get('/coupons', {
       params: { limit: 100, ...params },
     });
     return data;
@@ -528,7 +371,7 @@ export const adminApi = {
    * @returns Created coupon details
    */
   createCoupon: async (payload: CouponPayload): Promise<Coupon> => {
-    const { data } = await api.post(endpoints.admin.coupons.create, payload);
+    const { data } = await api.post('/coupons', payload);
     return data;
   },
   /**
@@ -541,7 +384,7 @@ export const adminApi = {
     id: string,
     payload: Partial<CouponPayload>,
   ): Promise<Coupon> => {
-    const { data } = await api.put(endpoints.admin.coupons.update(id), payload);
+    const { data } = await api.put(`/coupons/${id}`, payload);
     return data;
   },
   /**
@@ -550,7 +393,89 @@ export const adminApi = {
    * @returns Deletion confirmation message
    */
   deleteCoupon: async (id: string): Promise<{ message: string }> => {
-    const { data } = await api.delete(endpoints.admin.coupons.delete(id));
+    const { data } = await api.delete(`/coupons/${id}`);
+    return data;
+  },
+  /**
+   * Fetch products with admin-level access
+   * @param params - Query parameters for filtering and pagination
+   * @returns Paginated products response
+   */
+  getProducts: async (
+    params: { page?: number; limit?: number } = {},
+  ): Promise<any> => {
+    const { data } = await api.get('/products', {
+      params: { limit: 100, ...params },
+    });
+    return data;
+  },
+  /**
+   * Create a new product
+   * @param payload - Product creation data
+   * @returns Created product details
+   */
+  createProduct: async (payload: any): Promise<any> => {
+    const { data } = await api.post('/products', payload);
+    return data;
+  },
+  /**
+   * Update an existing product
+   * @param id - Product ID
+   * @param payload - Partial product update data
+   * @returns Updated product details
+   */
+  updateProduct: async (id: string, payload: any): Promise<any> => {
+    const { data } = await api.put(`/products/${id}`, payload);
+    return data;
+  },
+  /**
+   * Delete a product
+   * @param id - Product ID
+   * @returns Deletion confirmation message
+   */
+  deleteProduct: async (id: string): Promise<{ message: string }> => {
+    const { data } = await api.delete(`/products/${id}`);
+    return data;
+  },
+  /**
+   * Fetch brands with admin-level access
+   * @param params - Query parameters for filtering and pagination
+   * @returns Paginated brands response
+   */
+  getBrands: async (
+    params: { page?: number; limit?: number } = {},
+  ): Promise<any> => {
+    const { data } = await api.get('/brands', {
+      params: { limit: 100, ...params },
+    });
+    return data;
+  },
+  /**
+   * Create a new brand
+   * @param payload - Brand creation data
+   * @returns Created brand details
+   */
+  createBrand: async (payload: any): Promise<any> => {
+    const { data } = await api.post('/brands', payload);
+    return data;
+  },
+  /**
+   * Update an existing brand
+   * @param id - Brand ID
+   * @param payload - Partial brand update data
+   * @returns Updated brand details
+   */
+  updateBrand: async (id: string, payload: any): Promise<any> => {
+    const { data } = await api.put(`/brands/${id}`, payload);
+    return data;
+  },
+  /**
+   * Delete a brand
+   * @param id - Brand ID
+   * @returns Deletion confirmation message
+   */
+  deleteBrand: async (id: string): Promise<{ message: string }> => {
+    const { data } = await api.delete(`/brands/${id}`);
     return data;
   },
 };
@@ -560,23 +485,23 @@ export const adminApi = {
  */
 export const wishlistApi = {
   /**
-   * Add a template to user's wishlist
-   * @param templateId - Template ID to add
+   * Add a product to user's wishlist
+   * @param productId - Product ID to add
    * @returns Add to wishlist confirmation message
    */
-  addToWishlist: async (templateId: string): Promise<{ message: string }> => {
-    const { data } = await api.post(endpoints.wishlist.add(templateId));
+  addToWishlist: async (productId: string): Promise<{ message: string }> => {
+    const { data } = await api.post(`/wishlist/${productId}`);
     return data;
   },
   /**
-   * Remove a template from user's wishlist
-   * @param templateId - Template ID to remove
+   * Remove a product from user's wishlist
+   * @param productId - Product ID to remove
    * @returns Remove from wishlist confirmation message
    */
   removeFromWishlist: async (
-    templateId: string,
+    productId: string,
   ): Promise<{ message: string }> => {
-    const { data } = await api.delete(endpoints.wishlist.remove(templateId));
+    const { data } = await api.delete(`/wishlist/${productId}`);
     return data;
   },
   /**
@@ -584,18 +509,18 @@ export const wishlistApi = {
    * @returns Array of wishlist items
    */
   getMyWishlist: async (): Promise<WishlistItem[]> => {
-    const { data } = await api.get(endpoints.wishlist.my);
+    const { data } = await api.get('/wishlist/my');
     return data;
   },
   /**
-   * Check if a template is in user's wishlist
-   * @param templateId - Template ID to check
+   * Check if a product is in user's wishlist
+   * @param productId - Product ID to check
    * @returns Wishlist status flag
    */
   checkWishlist: async (
-    templateId: string,
+    productId: string,
   ): Promise<{ isWishlisted: boolean }> => {
-    const { data } = await api.get(endpoints.wishlist.check(templateId));
+    const { data } = await api.get(`/wishlist/check/${productId}`);
     return data;
   },
 };
@@ -605,12 +530,12 @@ export const wishlistApi = {
  */
 export const reviewsApi = {
   /**
-   * Create a new review for a template
-   * @param payload - Review creation data (rating, comment, template ID)
+   * Create a new review for a product
+   * @param payload - Review creation data (rating, comment, product ID)
    * @returns Created review details
    */
   createReview: async (payload: ReviewPayload): Promise<Review> => {
-    const { data } = await api.post(endpoints.reviews.create, payload);
+    const { data } = await api.post('/reviews', payload);
     return data;
   },
   /**
@@ -623,7 +548,7 @@ export const reviewsApi = {
     reviewId: string,
     payload: ReviewUpdatePayload,
   ): Promise<Review> => {
-    const { data } = await api.put(endpoints.reviews.update(reviewId), payload);
+    const { data } = await api.put(`/reviews/${reviewId}`, payload);
     return data;
   },
   /**
@@ -632,25 +557,25 @@ export const reviewsApi = {
    * @returns Deletion confirmation message
    */
   deleteReview: async (reviewId: string): Promise<{ message: string }> => {
-    const { data } = await api.delete(endpoints.reviews.delete(reviewId));
+    const { data } = await api.delete(`/reviews/${reviewId}`);
     return data;
   },
   /**
-   * Fetch all reviews for a specific template
-   * @param templateId - Template ID
-   * @returns Array of reviews for the template
+   * Fetch all reviews for a specific product
+   * @param productId - Product ID
+   * @returns Array of reviews for the product
    */
-  getTemplateReviews: async (templateId: string): Promise<Review[]> => {
-    const { data } = await api.get(endpoints.reviews.template(templateId));
+  getProductReviews: async (productId: string): Promise<Review[]> => {
+    const { data } = await api.get(`/reviews/product/${productId}`);
     return data;
   },
   /**
-   * Fetch current user's review for a specific template
-   * @param templateId - Template ID
+   * Fetch current user's review for a specific product
+   * @param productId - Product ID
    * @returns User's review or null if not reviewed
    */
-  getMyReview: async (templateId: string): Promise<Review | null> => {
-    const { data } = await api.get(endpoints.reviews.my(templateId));
+  getMyReview: async (productId: string): Promise<Review | null> => {
+    const { data } = await api.get(`/reviews/my/${productId}`);
     return data;
   },
   /**
@@ -658,140 +583,7 @@ export const reviewsApi = {
    * @returns Array of user's reviews
    */
   getMyReviews: async (): Promise<Review[]> => {
-    const { data } = await api.get(endpoints.reviews.myReviews);
-    return data;
-  },
-};
-
-/**
- * Downloads API - Handles user download operations
- */
-export const downloadsApi = {
-  /**
-   * Create a download entry after successful payment
-   * @param payload - Download creation data (templateId, orderId)
-   * @returns Created download details
-   */
-  createDownload: async (payload: DownloadPayload): Promise<Download> => {
-    const { data } = await api.post(endpoints.downloads.create, payload);
-    return data;
-  },
-  /**
-   * Fetch current user's downloads
-   * @returns Array of user's downloads
-   */
-  getMyDownloads: async (): Promise<Download[]> => {
-    const { data } = await api.get(endpoints.downloads.my);
-    return data;
-  },
-  /**
-   * Fetch a single download by ID
-   * @param id - Download ID
-   * @returns Download details
-   */
-  getDownloadById: async (id: string): Promise<Download> => {
-    const { data } = await api.get(endpoints.downloads.details(id));
-    return data;
-  },
-  /**
-   * Record a download and increment download count
-   * @param id - Download ID
-   * @returns Download record with file URL and remaining downloads
-   */
-  recordDownload: async (
-    id: string,
-  ): Promise<{
-    message: string;
-    downloadCount: number;
-    lastDownloadDate: string;
-    fileUrl: string;
-    remainingDownloads: number;
-  }> => {
-    const { data } = await api.post(endpoints.downloads.download(id));
-    return data;
-  },
-  /**
-   * Delete a download entry
-   * @param id - Download ID
-   * @returns Deletion confirmation message
-   */
-  deleteDownload: async (id: string): Promise<{ message: string }> => {
-    const { data } = await api.delete(endpoints.downloads.delete(id));
-    return data;
-  },
-};
-
-/**
- * Licenses API - Handles license type and purchased license operations
- */
-export const licensesApi = {
-  /**
-   * Fetch all active license types
-   * @returns Array of license types
-   */
-  getLicenseTypes: async (): Promise<any[]> => {
-    const { data } = await api.get(endpoints.licenses.list);
-    return data;
-  },
-  /**
-   * Fetch a specific license type by slug
-   * @param slug - License type slug
-   * @returns License type details
-   */
-  getLicenseTypeBySlug: async (slug: string): Promise<any> => {
-    const { data } = await api.get(endpoints.licenses.details(slug));
-    return data;
-  },
-  /**
-   * Calculate price for a template with specific license type
-   * @param templateId - Template ID
-   * @param licenseSlug - License type slug
-   * @returns Calculated price details
-   */
-  calculatePrice: async (
-    templateId: string,
-    licenseSlug: string,
-  ): Promise<{
-    basePrice: number;
-    licenseType: string;
-    priceMultiplier: number;
-    finalPrice: number;
-  }> => {
-    const { data } = await api.get(endpoints.licenses.calculatePrice, {
-      params: { templateId, licenseSlug },
-    });
-    return data;
-  },
-  /**
-   * Validate a license key
-   * @param licenseKey - License key to validate
-   * @param templateId - Optional template ID
-   * @returns Validation result
-   */
-  validateLicense: async (
-    licenseKey: string,
-    templateId?: string,
-  ): Promise<{
-    valid: boolean;
-    license?: {
-      type: string;
-      template: any;
-      expiryDate: string;
-    };
-  }> => {
-    const { data } = await api.post(endpoints.licenses.validate, {
-      licenseKey,
-      templateId,
-    });
-    return data;
-  },
-  /**
-   * Fetch user's purchased licenses
-   * @param userId - User ID
-   * @returns Array of purchased licenses
-   */
-  getUserLicenses: async (userId: string): Promise<any[]> => {
-    const { data } = await api.get(endpoints.licenses.myPurchases(userId));
+    const { data } = await api.get('/reviews/my');
     return data;
   },
 };
@@ -810,7 +602,7 @@ export const couponsApi = {
     code: string,
     orderAmount: number,
   ): Promise<CouponValidationResponse> => {
-    const { data } = await api.post(endpoints.coupons.validate, {
+    const { data } = await api.post('/coupons/validate', {
       code,
       orderAmount,
     });
@@ -822,7 +614,7 @@ export const couponsApi = {
    * @returns Coupon details
    */
   getCouponByCode: async (code: string): Promise<Coupon> => {
-    const { data } = await api.get(endpoints.coupons.byCode(code));
+    const { data } = await api.get(`/coupons/code/${code}`);
     return data;
   },
   /**
@@ -831,12 +623,7 @@ export const couponsApi = {
    * @returns Updated coupon
    */
   incrementUsage: async (couponId: string): Promise<Coupon> => {
-    const { data } = await api.post(endpoints.coupons.incrementUsage(couponId));
+    const { data } = await api.post(`/coupons/${couponId}/increment`);
     return data;
   },
 };
-
-/**
- * Re-export commonly used types for convenience
- */
-export type { TemplatesResponse, TemplatesQuery };

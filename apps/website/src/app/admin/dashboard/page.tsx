@@ -2,26 +2,26 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LayoutGrid, Shield, Users } from 'lucide-react';
+import { LayoutGrid, Shield, Users, Package } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getUserRole } from '@/lib/authCookies';
 import { useMe } from '@/hooks/auth/authQuery';
-import { AdminTemplatesPanel } from '@/components/admin/AdminTemplatesPanel';
-import { AdminCreatorsPanel } from '@/components/admin/AdminCreatorsPanel';
+import { AdminProductsPanel } from '@/components/admin/AdminProductsPanel';
+import { AdminBrandsPanel } from '@/components/admin/AdminBrandsPanel';
 import { AdminUsersPanel } from '@/components/admin/AdminUsersPanel';
 
-type AdminTab = 'templates' | 'creators' | 'users';
+type AdminTab = 'products' | 'brands' | 'users';
 
 const tabs: { id: AdminTab; label: string; icon: typeof LayoutGrid }[] = [
-  { id: 'templates', label: 'Templates', icon: LayoutGrid },
-  { id: 'creators', label: 'Creators', icon: Users },
+  { id: 'products', label: 'Products', icon: Package },
+  { id: 'brands', label: 'Brands', icon: Users },
   { id: 'users', label: 'Users', icon: Shield },
 ];
 
 export default function AdminDashboardPage() {
   const router = useRouter();
   const me = useMe();
-  const [activeTab, setActiveTab] = useState<AdminTab>('templates');
+  const [activeTab, setActiveTab] = useState<AdminTab>('products');
   const role = getUserRole();
   const isAdmin =
     role === 'admin' || me.data?.user?.roles?.includes('admin') === true;
@@ -54,8 +54,8 @@ export default function AdminDashboardPage() {
           Admin dashboard
         </h1>
         <p className='mt-2 max-w-2xl text-sm font-semibold text-indigo-950/80'>
-          Manage templates, creators, and user accounts. Changes apply
-          immediately to the live marketplace catalog and access control.
+          Manage products, brands, and user accounts. Changes apply immediately
+          to the live marketplace catalog and access control.
         </p>
       </div>
 
@@ -82,8 +82,8 @@ export default function AdminDashboardPage() {
         })}
       </div>
 
-      {activeTab === 'templates' ? <AdminTemplatesPanel /> : null}
-      {activeTab === 'creators' ? <AdminCreatorsPanel /> : null}
+      {activeTab === 'products' ? <AdminProductsPanel /> : null}
+      {activeTab === 'brands' ? <AdminBrandsPanel /> : null}
       {activeTab === 'users' ? <AdminUsersPanel /> : null}
     </div>
   );

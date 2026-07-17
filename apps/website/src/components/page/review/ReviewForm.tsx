@@ -4,7 +4,7 @@ import { Review, ReviewPayload, ReviewUpdatePayload } from '@/types';
 import { Button } from '../../ui/Button';
 
 interface ReviewFormProps {
-  templateId: string;
+  productId: string;
   existingReview?: Review | null;
   onSubmit: (data: ReviewPayload | ReviewUpdatePayload) => Promise<void>;
   onCancel?: () => void;
@@ -12,7 +12,7 @@ interface ReviewFormProps {
 }
 
 export function ReviewForm({
-  templateId,
+  productId,
   existingReview,
   onSubmit,
   onCancel,
@@ -28,7 +28,7 @@ export function ReviewForm({
 
     const data = existingReview
       ? ({ rating, comment } as ReviewUpdatePayload)
-      : ({ template: templateId, rating, comment } as ReviewPayload);
+      : ({ product: productId, rating, comment } as ReviewPayload);
 
     await onSubmit(data);
   };
@@ -76,7 +76,7 @@ export function ReviewForm({
           id='comment'
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder='Share your experience with this template...'
+          placeholder='Share your experience with this product...'
           rows={4}
           className='w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none'
           required

@@ -16,11 +16,11 @@ export function WishlistEmptyState() {
         Your wishlist is empty
       </h2>
       <p className='mb-8 text-center text-sm font-semibold text-indigo-900/70 max-w-md'>
-        Save templates you love by clicking the heart icon. They'll appear here
+        Save products you love by clicking the heart icon. They'll appear here
         for easy access.
       </p>
-      <Link href='/'>
-        <Button>Browse Templates</Button>
+      <Link href='/products'>
+        <Button>Browse Products</Button>
       </Link>
     </div>
   );

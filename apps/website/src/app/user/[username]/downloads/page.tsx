@@ -56,16 +56,16 @@ export default function UserDownloadsPage() {
 
   if (isLoading) {
     return (
-      <div className="animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
-        <div className="h-64 bg-gray-200 rounded"></div>
+      <div className='animate-pulse'>
+        <div className='h-8 bg-gray-200 rounded w-48 mb-8'></div>
+        <div className='h-64 bg-gray-200 rounded'></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+      <div className='bg-red-50 border border-red-200 rounded-lg p-4 text-red-800'>
         Failed to load downloads
       </div>
     );
@@ -74,22 +74,20 @@ export default function UserDownloadsPage() {
   if (!downloads || downloads.length === 0) {
     return (
       <>
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">
-          My Downloads
-        </h1>
-        <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-          <DownloadIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            No downloads yet
+        <h1 className='text-2xl font-bold text-gray-900 mb-8'>My Downloads</h1>
+        <div className='bg-white rounded-lg border border-gray-200 p-12 text-center'>
+          <DownloadIcon className='w-16 h-16 text-gray-400 mx-auto mb-4' />
+          <h2 className='text-xl font-semibold text-gray-900 mb-2'>
+            No downloads available
           </h2>
-          <p className="text-gray-600 mb-6">
-            After purchasing templates, they will appear here for download.
+          <p className='text-gray-600 mb-6'>
+            This is a physical products store. Downloads are not applicable.
           </p>
           <Link
-            href="/"
-            className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white font-semibold rounded-lg hover:brightness-110 transition"
+            href='/products'
+            className='inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white font-semibold rounded-lg hover:brightness-110 transition'
           >
-            Browse Templates
+            Browse Products
           </Link>
         </div>
       </>
@@ -98,32 +96,30 @@ export default function UserDownloadsPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
-        My Downloads
-      </h1>
+      <h1 className='text-2xl font-bold text-gray-900 mb-6'>My Downloads</h1>
 
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
+      <div className='bg-white rounded-lg border border-gray-200 overflow-hidden'>
+        <table className='w-full'>
+          <thead className='bg-gray-50 border-b border-gray-200'>
             <tr>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                 Item
               </th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                 License
               </th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                 Downloads
               </th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                 Purchased
               </th>
-              <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className='divide-y divide-gray-200'>
             {downloads.map((download: any) => {
               const remainingDownloads =
                 download.downloadLimit - download.downloadCount;
@@ -132,58 +128,57 @@ export default function UserDownloadsPage() {
               return (
                 <tr
                   key={download._id}
-                  className="hover:bg-gray-50 transition"
+                  className='hover:bg-gray-50 transition'
                 >
-                  <td className="px-6 py-4">
-                    <div className="flex items-start gap-4">
+                  <td className='px-6 py-4'>
+                    <div className='flex items-start gap-4'>
                       <img
                         src={download.template.cover}
                         alt={download.template.title}
-                        className="w-16 h-16 object-cover rounded-lg"
+                        className='w-16 h-16 object-cover rounded-lg'
                       />
-                      <div className="min-w-0">
+                      <div className='min-w-0'>
                         <Link
                           href={`/templates/${download.template._id}`}
-                          className="font-semibold text-gray-900 hover:text-fuchsia-600 transition block mb-1"
+                          className='font-semibold text-gray-900 hover:text-fuchsia-600 transition block mb-1'
                         >
                           {download.template.title}
                         </Link>
-                        <p className="text-sm text-gray-600 line-clamp-1">
+                        <p className='text-sm text-gray-600 line-clamp-1'>
                           {download.template.description}
                         </p>
-                        <div className="flex items-center gap-1 mt-1">
-                          <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                          <span className="text-sm text-gray-600">
-                            {download.template.averageRating?.toFixed(
-                              1,
-                            ) || '4.5'}
+                        <div className='flex items-center gap-1 mt-1'>
+                          <Star className='w-4 h-4 text-amber-400 fill-amber-400' />
+                          <span className='text-sm text-gray-600'>
+                            {download.template.averageRating?.toFixed(1) ||
+                              '4.5'}
                           </span>
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold">
+                  <td className='px-6 py-4'>
+                    <span className='inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold'>
                       Regular
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-600">
+                  <td className='px-6 py-4'>
+                    <div className='text-sm text-gray-600'>
                       {download.downloadCount} / {download.downloadLimit}
                     </div>
                     {isLimitReached && (
-                      <div className="text-xs text-red-600 mt-1">
+                      <div className='text-xs text-red-600 mt-1'>
                         Limit reached
                       </div>
                     )}
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-600">
+                  <td className='px-6 py-4'>
+                    <div className='text-sm text-gray-600'>
                       {formatDate(download.createdAt)}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
+                  <td className='px-6 py-4'>
+                    <div className='flex items-center gap-2'>
                       <button
                         onClick={() => handleDownload(download)}
                         disabled={
@@ -197,7 +192,7 @@ export default function UserDownloadsPage() {
                             : 'bg-fuchsia-600 text-white hover:bg-fuchsia-700'
                         }`}
                       >
-                        <DownloadIcon className="w-4 h-4" />
+                        <DownloadIcon className='w-4 h-4' />
                         {downloadingId === download._id
                           ? 'Downloading...'
                           : 'Download'}
@@ -205,10 +200,10 @@ export default function UserDownloadsPage() {
                       <button
                         onClick={() => handleDelete(download._id)}
                         disabled={deleteDownload.isPending}
-                        className="p-2 text-gray-400 hover:text-red-600 transition"
-                        title="Remove"
+                        className='p-2 text-gray-400 hover:text-red-600 transition'
+                        title='Remove'
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className='w-4 h-4' />
                       </button>
                     </div>
                   </td>
@@ -220,25 +215,25 @@ export default function UserDownloadsPage() {
       </div>
 
       {/* Help Section */}
-      <div className="mt-8 bg-gradient-to-br from-fuchsia-600 via-purple-600 to-cyan-500 rounded-lg p-6 text-white">
-        <h3 className="font-bold mb-2">Need help with your downloads?</h3>
-        <p className="text-white/90 text-sm mb-4">
-          If you're having trouble downloading your files, please check
-          our FAQ or contact support.
+      <div className='mt-8 bg-gradient-to-br from-fuchsia-600 via-purple-600 to-cyan-500 rounded-lg p-6 text-white'>
+        <h3 className='font-bold mb-2'>Need help with your downloads?</h3>
+        <p className='text-white/90 text-sm mb-4'>
+          If you're having trouble downloading your files, please check our FAQ
+          or contact support.
         </p>
-        <div className="flex gap-3">
+        <div className='flex gap-3'>
           <Link
-            href="/faq"
-            className="inline-flex items-center gap-2 bg-white text-fuchsia-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition text-sm"
+            href='/faq'
+            className='inline-flex items-center gap-2 bg-white text-fuchsia-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition text-sm'
           >
-            <FolderOpen className="w-4 h-4" />
+            <FolderOpen className='w-4 h-4' />
             View FAQ
           </Link>
           <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition text-sm"
+            href='/contact'
+            className='inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition text-sm'
           >
-            <ExternalLink className="w-4 h-4" />
+            <ExternalLink className='w-4 h-4' />
             Contact Support
           </Link>
         </div>

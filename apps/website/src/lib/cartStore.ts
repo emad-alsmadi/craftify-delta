@@ -3,11 +3,23 @@
 import { useCallback, useSyncExternalStore } from 'react';
 
 export type CartItem = {
-  templateId: string;
+  productId: string;
   title: string;
   price: number;
   cover: string;
   qty: number;
+  variant?: {
+    size?: string;
+    color?: string;
+    colorCode?: string;
+    sku?: string;
+  };
+  weight?: number;
+  dimensions?: {
+    length?: number;
+    width?: number;
+    height?: number;
+  };
 };
 
 export type AppliedCoupon = {
@@ -39,20 +51,23 @@ function safeParse(json: string | null): CartState {
     const parsed = JSON.parse(json) as CartState;
     if (!parsed || !Array.isArray(parsed.items))
       return { items: [], coupon: null };
-    // Migrate old templateId to templateId for compatibility
+    // Migrate old templateId to productId for compatibility
     const items = parsed.items.map((item: any) => ({
       ...item,
-      templateId: item.templateId,
+      productId: item.productId || item.templateId,
     }));
     return {
       items: items
-        .filter((x: any) => x && typeof x.templateId === 'string')
+        .filter((x: any) => x && typeof x.productId === 'string')
         .map((x: any) => ({
-          templateId: String(x.templateId),
+          productId: String(x.productId),
           title: String(x.title ?? ''),
           price: Number(x.price ?? 0),
           cover: String(x.cover ?? ''),
           qty: Math.max(1, Number(x.qty ?? 1)),
+          variant: x.variant,
+          weight: x.weight ? Number(x.weight) : undefined,
+          dimensions: x.dimensions,
         })),
       coupon: parsed.coupon || null,
     };
@@ -119,20 +134,20 @@ export function clearCart() {
   writeState({ items: [], coupon: null });
 }
 
-export function removeFromCart(templateId: string) {
+export function removeFromCart(productId: string) {
   const state = readState();
   writeState({
-    items: state.items.filter((i) => i.templateId !== templateId),
+    items: state.items.filter((i) => i.productId !== productId),
     coupon: state.coupon,
   });
 }
 
-export function setCartQty(templateId: string, qty: number) {
+export function setCartQty(productId: string, qty: number) {
   const q = Math.max(1, Math.floor(qty));
   const state = readState();
   writeState({
     items: state.items.map((i) =>
-      i.templateId === templateId ? { ...i, qty: q } : i,
+      i.productId === productId ? { ...i, qty: q } : i,
     ),
     coupon: state.coupon,
   });
@@ -142,11 +157,26 @@ export function addToCart(item: Omit<CartItem, 'qty'> & { qty?: number }) {
   const state = readState();
   const qty = Math.max(1, Math.floor(item.qty ?? 1));
 
-  const existing = state.items.find((i) => i.templateId === item.templateId);
+  // Check if same product with same variant exists
+  const existing = state.items.find((i) => {
+    if (i.productId !== item.productId) return false;
+    if (!item.variant && !i.variant) return true;
+    if (!item.variant || !i.variant) return false;
+    return (
+      item.variant.size === i.variant.size &&
+      item.variant.color === i.variant.color
+    );
+  });
+
   if (existing) {
     writeState({
       items: state.items.map((i) =>
-        i.templateId === item.templateId ? { ...i, qty: i.qty + qty } : i,
+        i.productId === item.productId &&
+        ((!item.variant && !i.variant) ||
+          (item.variant?.size === i.variant?.size &&
+            item.variant?.color === i.variant?.color))
+          ? { ...i, qty: i.qty + qty }
+          : i,
       ),
       coupon: state.coupon,
     });
@@ -157,11 +187,14 @@ export function addToCart(item: Omit<CartItem, 'qty'> & { qty?: number }) {
     items: [
       ...state.items,
       {
-        templateId: item.templateId,
+        productId: item.productId,
         title: item.title,
         price: item.price,
         cover: item.cover,
         qty,
+        variant: item.variant,
+        weight: item.weight,
+        dimensions: item.dimensions,
       },
     ],
     coupon: state.coupon,
@@ -183,6 +216,33 @@ export function getCartDiscount(state: CartState) {
     return (subtotal * state.coupon.discountValue) / 100;
   }
   return Math.min(state.coupon.discountValue, subtotal);
+}
+
+export function getCartWeight(state: CartState) {
+  return state.items.reduce((sum, i) => {
+    const itemWeight = (i.weight || 0) * i.qty;
+    return sum + itemWeight;
+  }, 0);
+}
+
+export function getCartShippingCost(
+  state: CartState,
+  shippingMethod: 'standard' | 'express' = 'standard',
+) {
+  const weight = getCartWeight(state);
+  const baseRate = shippingMethod === 'express' ? 15 : 5;
+  const weightRate = weight > 0 ? Math.ceil(weight / 0.5) * 2 : 0; // $2 per 0.5kg
+  return baseRate + weightRate;
+}
+
+export function getCartTotal(
+  state: CartState,
+  shippingMethod: 'standard' | 'express' = 'standard',
+) {
+  const subtotal = getCartSubtotal(state);
+  const discount = getCartDiscount(state);
+  const shipping = getCartShippingCost(state, shippingMethod);
+  return subtotal - discount + shipping;
 }
 
 export function setCartCoupon(coupon: AppliedCoupon | null) {
@@ -216,6 +276,17 @@ export function useCart() {
     count: getCartCount(state),
     subtotal: getCartSubtotal(state),
     discount: getCartDiscount(state),
+    weight: getCartWeight(state),
+    getShippingCost: useCallback(
+      (method: 'standard' | 'express' = 'standard') =>
+        getCartShippingCost(state, method),
+      [state],
+    ),
+    getTotal: useCallback(
+      (method: 'standard' | 'express' = 'standard') =>
+        getCartTotal(state, method),
+      [state],
+    ),
     coupon: state.coupon,
     ...actions,
   };

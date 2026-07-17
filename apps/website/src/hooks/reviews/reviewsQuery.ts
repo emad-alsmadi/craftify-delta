@@ -2,26 +2,28 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { reviewsApi } from '@/lib/api';
 import type { Review, ReviewPayload, ReviewUpdatePayload } from '@/types';
 
-export const REVIEWS_TEMPLATE_KEY = (templateId: string) => ['reviews', 'template', templateId] as const;
+export const REVIEWS_PRODUCT_KEY = (productId: string) =>
+  ['reviews', 'product', productId] as const;
 export const REVIEWS_MY_KEY = ['reviews', 'my'] as const;
-export const REVIEWS_MY_TEMPLATE_KEY = (templateId: string) => ['reviews', 'my', templateId] as const;
+export const REVIEWS_MY_PRODUCT_KEY = (productId: string) =>
+  ['reviews', 'my', productId] as const;
 
-export function useTemplateReviews(templateId: string) {
+export function useProductReviews(productId: string) {
   return useQuery<Review[]>({
-    queryKey: REVIEWS_TEMPLATE_KEY(templateId),
+    queryKey: REVIEWS_PRODUCT_KEY(productId),
     queryFn: async () => {
-      return await reviewsApi.getTemplateReviews(templateId);
+      return await reviewsApi.getProductReviews(productId);
     },
     staleTime: 30_000,
     retry: 1,
   });
 }
 
-export function useMyReview(templateId: string) {
+export function useMyReview(productId: string) {
   return useQuery<Review | null>({
-    queryKey: REVIEWS_MY_TEMPLATE_KEY(templateId),
+    queryKey: REVIEWS_MY_PRODUCT_KEY(productId),
     queryFn: async () => {
-      return await reviewsApi.getMyReview(templateId);
+      return await reviewsApi.getMyReview(productId);
     },
     staleTime: 30_000,
     retry: 1,
@@ -47,10 +49,14 @@ export function useCreateReviewMutation() {
       return await reviewsApi.createReview(payload);
     },
     onSuccess: async (data, variables) => {
-      // Invalidate template reviews
-      await qc.invalidateQueries({ queryKey: REVIEWS_TEMPLATE_KEY(variables.template) });
-      // Invalidate my review for this template
-      await qc.invalidateQueries({ queryKey: REVIEWS_MY_TEMPLATE_KEY(variables.template) });
+      // Invalidate product reviews
+      await qc.invalidateQueries({
+        queryKey: REVIEWS_PRODUCT_KEY(variables.product),
+      });
+      // Invalidate my review for this product
+      await qc.invalidateQueries({
+        queryKey: REVIEWS_MY_PRODUCT_KEY(variables.product),
+      });
       // Invalidate my reviews
       await qc.invalidateQueries({ queryKey: REVIEWS_MY_KEY });
     },
@@ -61,14 +67,24 @@ export function useUpdateReviewMutation() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ reviewId, payload }: { reviewId: string; payload: ReviewUpdatePayload }) => {
+    mutationFn: async ({
+      reviewId,
+      payload,
+    }: {
+      reviewId: string;
+      payload: ReviewUpdatePayload;
+    }) => {
       return await reviewsApi.updateReview(reviewId, payload);
     },
     onSuccess: async (data) => {
-      // Invalidate template reviews
-      await qc.invalidateQueries({ queryKey: REVIEWS_TEMPLATE_KEY(data.template) });
-      // Invalidate my review for this template
-      await qc.invalidateQueries({ queryKey: REVIEWS_MY_TEMPLATE_KEY(data.template) });
+      // Invalidate product reviews
+      await qc.invalidateQueries({
+        queryKey: REVIEWS_PRODUCT_KEY(data.product),
+      });
+      // Invalidate my review for this product
+      await qc.invalidateQueries({
+        queryKey: REVIEWS_MY_PRODUCT_KEY(data.product),
+      });
       // Invalidate my reviews
       await qc.invalidateQueries({ queryKey: REVIEWS_MY_KEY });
     },
@@ -79,14 +95,24 @@ export function useDeleteReviewMutation() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ reviewId, templateId }: { reviewId: string; templateId: string }) => {
+    mutationFn: async ({
+      reviewId,
+      productId,
+    }: {
+      reviewId: string;
+      productId: string;
+    }) => {
       return await reviewsApi.deleteReview(reviewId);
     },
     onSuccess: async (_, variables) => {
-      // Invalidate template reviews
-      await qc.invalidateQueries({ queryKey: REVIEWS_TEMPLATE_KEY(variables.templateId) });
-      // Invalidate my review for this template
-      await qc.invalidateQueries({ queryKey: REVIEWS_MY_TEMPLATE_KEY(variables.templateId) });
+      // Invalidate product reviews
+      await qc.invalidateQueries({
+        queryKey: REVIEWS_PRODUCT_KEY(variables.productId),
+      });
+      // Invalidate my review for this product
+      await qc.invalidateQueries({
+        queryKey: REVIEWS_MY_PRODUCT_KEY(variables.productId),
+      });
       // Invalidate my reviews
       await qc.invalidateQueries({ queryKey: REVIEWS_MY_KEY });
     },

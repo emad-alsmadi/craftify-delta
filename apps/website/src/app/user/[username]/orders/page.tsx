@@ -7,6 +7,7 @@ import {
   ArrowRight,
   ExternalLink,
   FolderOpen,
+  Truck,
 } from 'lucide-react';
 import { useMyOrders } from '@/hooks/orders/ordersQuery';
 import {
@@ -93,9 +94,9 @@ export default function UserOrdersPage() {
 
   if (q.isLoading) {
     return (
-      <div className="animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
-        <div className="h-64 bg-gray-200 rounded"></div>
+      <div className='animate-pulse'>
+        <div className='h-8 bg-gray-200 rounded w-48 mb-8'></div>
+        <div className='h-64 bg-gray-200 rounded'></div>
       </div>
     );
   }
@@ -104,7 +105,7 @@ export default function UserOrdersPage() {
     logErrorForDev(q.error);
     const msg = getUserFacingErrorMessage(q.error, 'Failed to load orders');
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+      <div className='bg-red-50 border border-red-200 rounded-lg p-4 text-red-800'>
         {msg}
       </div>
     );
@@ -112,69 +113,72 @@ export default function UserOrdersPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">My Orders</h1>
+      <h1 className='text-2xl font-bold text-gray-900 mb-6'>My Orders</h1>
 
       {orders.length === 0 ? (
-        <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-          <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-fuchsia-100 text-fuchsia-600 mb-4">
-            <Receipt className="h-6 w-6" />
+        <div className='bg-white rounded-lg border border-gray-200 p-12 text-center'>
+          <div className='mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-fuchsia-100 text-fuchsia-600 mb-4'>
+            <Receipt className='h-6 w-6' />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <h2 className='text-xl font-semibold text-gray-900 mb-2'>
             No orders yet
           </h2>
-          <p className="text-gray-600 mb-6">
-            Start browsing templates and place your first order.
+          <p className='text-gray-600 mb-6'>
+            Start browsing products and place your first order.
           </p>
           <Link
-            href="/"
-            className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white font-semibold rounded-lg hover:brightness-110 transition"
+            href='/products'
+            className='inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-fuchsia-600 via-purple-600 to-cyan-500 text-white font-semibold rounded-lg hover:brightness-110 transition'
           >
-            Browse templates
+            Browse products
           </Link>
         </div>
       ) : (
         <>
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+          <div className='bg-white rounded-lg border border-gray-200 overflow-hidden'>
+            <table className='w-full'>
+              <thead className='bg-gray-50 border-b border-gray-200'>
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                     Order
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                     Date
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                     Payment
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
+                    Shipping
+                  </th>
+                  <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                     Total
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th className='px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider'>
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className='divide-y divide-gray-200'>
                 {orders.map((o) => (
                   <tr
                     key={o._id}
-                    className="hover:bg-gray-50 transition"
+                    className='hover:bg-gray-50 transition'
                   >
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-gray-900">
+                    <td className='px-6 py-4'>
+                      <div className='font-semibold text-gray-900'>
                         #{o._id.slice(-6).toUpperCase()}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-600">
+                    <td className='px-6 py-4'>
+                      <div className='text-sm text-gray-600'>
                         {formatDate(o.createdAt)}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className='px-6 py-4'>
                       <span
                         className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${statusClass(
                           o.status,
@@ -183,7 +187,7 @@ export default function UserOrdersPage() {
                         {statusLabel(o.status)}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className='px-6 py-4'>
                       <span
                         className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${paymentBadgeClass(
                           o.paymentStatus,
@@ -192,18 +196,28 @@ export default function UserOrdersPage() {
                         {paymentBadgeLabel(o.paymentStatus)}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-gray-900">
+                    <td className='px-6 py-4'>
+                      {o.status === 'shipped' || o.status === 'delivered' ? (
+                        <div className='flex items-center gap-1 text-sm text-gray-600'>
+                          <Truck className='h-4 w-4' />
+                          <span>{o.shippingMethod || 'Standard'}</span>
+                        </div>
+                      ) : (
+                        <span className='text-sm text-gray-400'>-</span>
+                      )}
+                    </td>
+                    <td className='px-6 py-4'>
+                      <div className='font-semibold text-gray-900'>
                         ${o.totalPrice.toFixed(2)}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className='px-6 py-4'>
                       <Link
                         href={`/orders/${o._id}`}
-                        className="inline-flex items-center gap-1 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition"
+                        className='inline-flex items-center gap-1 text-sm font-semibold text-fuchsia-600 hover:text-fuchsia-700 transition'
                       >
                         View
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className='w-4 h-4' />
                       </Link>
                     </td>
                   </tr>
@@ -213,27 +227,25 @@ export default function UserOrdersPage() {
           </div>
 
           {/* Help Section */}
-          <div className="mt-8 bg-gradient-to-br from-fuchsia-600 via-purple-600 to-cyan-500 rounded-lg p-6 text-white">
-            <h3 className="font-bold mb-2">
-              Need help with your orders?
-            </h3>
-            <p className="text-white/90 text-sm mb-4">
-              If you have questions about your order status or payment,
-              please check our FAQ or contact support.
+          <div className='mt-8 bg-gradient-to-br from-fuchsia-600 via-purple-600 to-cyan-500 rounded-lg p-6 text-white'>
+            <h3 className='font-bold mb-2'>Need help with your orders?</h3>
+            <p className='text-white/90 text-sm mb-4'>
+              If you have questions about your order status or payment, please
+              check our FAQ or contact support.
             </p>
-            <div className="flex gap-3">
+            <div className='flex gap-3'>
               <Link
-                href="/faq"
-                className="inline-flex items-center gap-2 bg-white text-fuchsia-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition text-sm"
+                href='/faq'
+                className='inline-flex items-center gap-2 bg-white text-fuchsia-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition text-sm'
               >
-                <FolderOpen className="w-4 h-4" />
+                <FolderOpen className='w-4 h-4' />
                 View FAQ
               </Link>
               <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition text-sm"
+                href='/contact'
+                className='inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-lg font-semibold hover:bg-white/30 transition text-sm'
               >
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className='w-4 h-4' />
                 Contact Support
               </Link>
             </div>

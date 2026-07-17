@@ -10,32 +10,32 @@ const faqs = [
     questions: [
       {
         q: 'What is Craftify?',
-        a: 'Craftify is a premium templates marketplace where creators can buy and sell high-quality website templates, UI kits, and design resources.',
+        a: 'Craftify is a premium e-commerce store where you can buy high-quality physical products including clothing, accessories, and lifestyle items from top brands.',
       },
       {
-        q: 'How do I purchase a template?',
-        a: 'Simply browse our templates, click on the one you like, and click the "Add to Cart" button. You can then proceed to checkout and complete your purchase securely.',
+        q: 'How do I purchase a product?',
+        a: 'Simply browse our products, select your preferred size and color, and click the "Add to Cart" button. You can then proceed to checkout and complete your purchase securely.',
       },
       {
-        q: 'Can I use templates for commercial projects?',
-        a: 'Yes! All templates on Craftify come with a commercial license that allows you to use them for client projects and commercial purposes.',
+        q: 'Can I return products?',
+        a: 'Yes! We offer a 30-day return policy for most products. Items must be unworn, unwashed, and in original packaging with tags attached.',
       },
     ],
   },
   {
-    category: 'Licensing',
+    category: 'Shipping & Delivery',
     questions: [
       {
-        q: 'What license do I get with my purchase?',
-        a: 'Each template comes with a standard commercial license that allows you to use the template in unlimited personal and commercial projects.',
+        q: 'What shipping methods do you offer?',
+        a: 'We offer standard shipping (5-7 business days) and express shipping (2-3 business days). Shipping costs are calculated based on weight and destination.',
       },
       {
-        q: 'Can I resell the templates?',
-        a: 'No, you cannot resell or redistribute the templates as-is. However, you can use them in client projects.',
+        q: 'Do you ship internationally?',
+        a: 'Yes, we ship to most countries worldwide. International shipping times and costs vary by destination.',
       },
       {
-        q: 'Do I need to attribute the creator?',
-        a: "No attribution is required, though it's always appreciated if you mention the creator in your project credits.",
+        q: 'How can I track my order?',
+        a: 'Once your order ships, you will receive a tracking number via email. You can track your order status in your account dashboard.',
       },
     ],
   },
@@ -48,7 +48,7 @@ const faqs = [
       },
       {
         q: 'What is your refund policy?',
-        a: "We offer a 14-day refund policy if the template doesn't work as described or has technical issues that cannot be resolved.",
+        a: 'We offer a 30-day refund policy for most products. Refunds are processed within 5-7 business days of receiving the returned item.',
       },
       {
         q: 'Are my payments secure?',
@@ -60,16 +60,16 @@ const faqs = [
     category: 'Support',
     questions: [
       {
-        q: 'How do I get support for a template?',
-        a: 'Each template has a support section where you can contact the creator directly. Premium members also get priority support.',
+        q: 'How do I get support for my order?',
+        a: 'You can contact our support team through the contact page or by emailing support@craftify.com. We typically respond within 24 hours.',
       },
       {
-        q: 'Do you offer custom development services?',
-        a: "We don't offer custom development directly, but many of our creators are available for freelance work through their profiles.",
+        q: 'Do you offer custom orders?',
+        a: "We don't offer custom orders directly, but we regularly update our inventory with new products and limited editions.",
       },
       {
-        q: 'How do I report a bug or issue?',
-        a: "You can report bugs through the template's support page or by contacting our support team directly.",
+        q: 'How do I report a damaged or incorrect item?',
+        a: "If you receive a damaged or incorrect item, please contact our support team immediately with photos of the item and packaging. We'll arrange a replacement or refund.",
       },
     ],
   },

@@ -5,31 +5,31 @@ import { motion } from 'framer-motion';
 import { Filter, Search } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { TemplateCard } from '@/components/page/template/TemplateCard';
-import { useTemplates } from '@/hooks/templates/templatesQuery';
-import { CategorySidebar } from '@/components/templates/CategorySidebar';
+import { ProductCard } from '@/components/products/ProductCard';
+import { useProducts } from '@/hooks/products/productsQuery';
+import { CategorySidebar } from '@/components/products/CategorySidebar';
 
-export default function TemplatesPage() {
+export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 8;
+  const limit = 12;
 
   const {
     data: response,
     isLoading,
     error,
-  } = useTemplates({
+  } = useProducts({
     page: currentPage,
     limit,
     sort: 'createdAt',
   });
-  const templates = response?.data || [];
+  const products = response?.data || [];
   const meta = response?.meta || { total: 0, page: 1, pages: 1, limit };
 
-  const filteredTemplates = templates.filter(
-    (template) =>
-      template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      template.description.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredProducts = products.filter(
+    (product) =>
+      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handlePageChange = (page: number) => {
@@ -42,7 +42,7 @@ export default function TemplatesPage() {
       <div className='min-h-screen flex items-center justify-center'>
         <div className='text-center'>
           <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-fuchsia-600 mx-auto'></div>
-          <p className='mt-4 text-gray-600'>Loading templates...</p>
+          <p className='mt-4 text-gray-600'>Loading products...</p>
         </div>
       </div>
     );
@@ -52,7 +52,7 @@ export default function TemplatesPage() {
     return (
       <div className='min-h-screen flex items-center justify-center'>
         <div className='text-center text-red-600'>
-          <p>Failed to load templates</p>
+          <p>Failed to load products</p>
         </div>
       </div>
     );
@@ -76,10 +76,10 @@ export default function TemplatesPage() {
               className='mb-8'
             >
               <h1 className='text-3xl font-extrabold text-gray-900 mb-2'>
-                Templates Marketplace
+                Products
               </h1>
               <p className='text-gray-600'>
-                Discover amazing templates for your next project
+                Discover amazing products for your lifestyle
               </p>
             </motion.div>
 
@@ -94,7 +94,7 @@ export default function TemplatesPage() {
                 <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5' />
                 <Input
                   type='text'
-                  placeholder='Search templates...'
+                  placeholder='Search products...'
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className='pl-10'
@@ -109,8 +109,8 @@ export default function TemplatesPage() {
               </Button>
             </motion.div>
 
-            {/* Templates Grid */}
-            {filteredTemplates && filteredTemplates.length > 0 ? (
+            {/* Products Grid */}
+            {filteredProducts && filteredProducts.length > 0 ? (
               <>
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -118,10 +118,10 @@ export default function TemplatesPage() {
                   transition={{ delay: 0.2 }}
                   className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
                 >
-                  {filteredTemplates.map((template) => (
-                    <TemplateCard
-                      key={template._id}
-                      template={template}
+                  {filteredProducts.map((product) => (
+                    <ProductCard
+                      key={product._id}
+                      product={product}
                     />
                   ))}
                 </motion.div>
@@ -181,8 +181,8 @@ export default function TemplatesPage() {
               >
                 <p className='text-gray-500 text-lg'>
                   {searchQuery
-                    ? 'No templates found matching your search.'
-                    : 'No templates available.'}
+                    ? 'No products found matching your search.'
+                    : 'No products available.'}
                 </p>
               </motion.div>
             )}

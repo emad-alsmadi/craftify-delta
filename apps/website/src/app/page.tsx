@@ -1,20 +1,16 @@
 'use client';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { TemplatesQuery } from '@/types';
-import { useTemplates } from '@/hooks/templates/templatesQuery';
+import type { ProductsQuery } from '@/types';
+import { useProducts } from '@/hooks/products/productsQuery';
 import { HeroSection } from '@/components/home/HeroSection';
-import { TrendingTemplates } from '@/components/home/TrendingTemplates';
-import { NewArrivals } from '@/components/home/NewArrivals';
 import { Testimonials } from '@/components/home/Testimonials';
-import { TopCreators } from '@/components/home/TopCreators';
 import { CTASection } from '@/components/home/CTASection';
-import { BestSellingTemplates } from '@/components/home/BestSellingTemplates';
 import { PopularCategories } from '@/components/home/PopularCategories';
 
 export default function HomePage() {
   const router = useRouter();
-  const [query, setQuery] = useState<TemplatesQuery>({
+  const [query, setQuery] = useState<ProductsQuery>({
     page: 1,
     limit: 8,
     sort: 'createdAt',
@@ -22,23 +18,23 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const stableQuery = useMemo(() => query, [query]);
-  const templatesQuery = useTemplates(stableQuery);
-  const data = templatesQuery.data;
-  const loading = templatesQuery.isLoading;
-  const error = (templatesQuery.error as any)?.message || null;
+  const productsQuery = useProducts(stableQuery);
+  const data = productsQuery.data;
+  const loading = productsQuery.isLoading;
+  const error = (productsQuery.error as any)?.message || null;
 
   const handlePageChange = (page: number) => {
-    setQuery((q: TemplatesQuery) => ({ ...q, page }));
+    setQuery((q: ProductsQuery) => ({ ...q, page }));
   };
 
   const handleFiltersChange = (newFilters: any) => {
-    setQuery((q: TemplatesQuery) => ({ ...q, ...newFilters, page: 1 }));
+    setQuery((q: ProductsQuery) => ({ ...q, ...newFilters, page: 1 }));
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/templates?q=${encodeURIComponent(searchQuery)}`);
+      router.push(`/products?q=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -64,32 +60,6 @@ export default function HomePage() {
       />
 
       <PopularCategories />
-
-      <TrendingTemplates
-        templates={data?.data || []}
-        loading={loading}
-        error={error}
-        gridVariants={gridVariants}
-        itemVariants={itemVariants}
-      />
-
-      <NewArrivals
-        templates={data?.data || []}
-        loading={loading}
-        error={error}
-        gridVariants={gridVariants}
-        itemVariants={itemVariants}
-      />
-
-      <BestSellingTemplates
-        templates={data?.data || []}
-        loading={loading}
-        error={error}
-        gridVariants={gridVariants}
-        itemVariants={itemVariants}
-      />
-
-      <TopCreators />
 
       <Testimonials />
 

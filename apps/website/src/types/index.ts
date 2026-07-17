@@ -1,49 +1,3 @@
-export interface Creator {
-  _id: string;
-  name: string;
-  country: string;
-  bio: string;
-  roles: string[];
-}
-
-export interface Template {
-  _id: string;
-  title: string;
-  creator: Creator | string;
-  description: string;
-  price: number;
-  cover: string;
-  averageRating: number;
-  reviewCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface TemplatesResponse {
-  data: Template[];
-  meta: {
-    total: number;
-    page: number;
-    pages: number;
-    limit: number;
-  };
-}
-
-export interface CreatorsResponse {
-  data: Creator[];
-  meta: {
-    total: number;
-    page: number;
-    pages: number;
-    limit: number;
-  };
-}
-
-export interface CreatorsQuery {
-  page?: number;
-  limit?: number;
-}
-
 export type OrderStatus =
   | 'pending'
   | 'paid'
@@ -58,25 +12,6 @@ export type PaymentStatus =
   | 'failed'
   | 'refunded';
 
-export interface SubscriptionRecord {
-  _id: string;
-  user: string;
-  stripeSubscriptionId: string;
-  stripePriceId: string;
-  status: string;
-  currentPeriodEnd?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface OrderItem {
-  templateId: string;
-  title: string;
-  price: number;
-  qty: number;
-  cover: string;
-}
-
 export interface ShippingAddress {
   name: string;
   phone: string;
@@ -84,6 +19,19 @@ export interface ShippingAddress {
   city: string;
   zip: string;
   notes?: string;
+}
+
+export interface OrderItem {
+  productId: string;
+  title: string;
+  price: number;
+  qty: number;
+  cover: string;
+  variant?: {
+    size?: string;
+    color?: string;
+    colorCode?: string;
+  };
 }
 
 export interface Order {
@@ -100,15 +48,18 @@ export interface Order {
   shippingPrice: number;
   taxPrice: number;
   totalPrice: number;
+  shippingMethod?: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface TemplatesQuery {
+export interface ProductsQuery {
   q?: string;
   minPrice?: number;
   maxPrice?: number;
-  creator?: string;
+  brand?: string;
+  category?: string;
+  subcategory?: string;
   page?: number;
   limit?: number;
   sort?: string;
@@ -125,21 +76,6 @@ export interface AdminUser {
   updatedAt?: string;
 }
 
-export type TemplatePayload = {
-  title: string;
-  creator: string;
-  description: string;
-  price: number;
-  cover: string;
-};
-
-export type CreatorPayload = {
-  name: string;
-  country: string;
-  bio: string;
-  roles: AppRole[];
-};
-
 export type UserUpdatePayload = {
   email?: string;
   username?: string;
@@ -150,7 +86,7 @@ export type UserUpdatePayload = {
 export interface WishlistItem {
   _id: string;
   user: string;
-  template: Template;
+  product: Product;
   createdAt: string;
   updatedAt: string;
 }
@@ -162,7 +98,7 @@ export interface Review {
     username: string;
     email: string;
   };
-  template: string;
+  product: string;
   rating: number;
   comment: string;
   createdAt: string;
@@ -170,7 +106,7 @@ export interface Review {
 }
 
 export interface ReviewPayload {
-  template: string;
+  product: string;
   rating: number;
   comment: string;
 }
@@ -178,23 +114,6 @@ export interface ReviewPayload {
 export interface ReviewUpdatePayload {
   rating?: number;
   comment?: string;
-}
-
-export interface Download {
-  _id: string;
-  user: string;
-  template: Template;
-  order: Order;
-  downloadCount: number;
-  lastDownloadDate?: string;
-  downloadLimit: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface DownloadPayload {
-  templateId: string;
-  orderId: string;
 }
 
 export type DiscountType = 'percentage' | 'fixed';
@@ -251,3 +170,89 @@ export interface CouponValidationResponse {
     expirationDate: string;
   };
 }
+
+export interface Product {
+  _id: string;
+  title: string;
+  brand: Brand | string;
+  description: string;
+  price: number;
+  basePrice: number;
+  cover: string;
+  category: string;
+  subcategory?: string;
+  material?: string;
+  variants?: ProductVariant[];
+  dimensions?: {
+    length?: number;
+    width?: number;
+    height?: number;
+  };
+  weight?: number;
+  shippingInfo?: {
+    weight?: number;
+    dimensions?: {
+      length?: number;
+      width?: number;
+      height?: number;
+    };
+  };
+  stock: number;
+  sku?: string;
+  averageRating: number;
+  reviewCount: number;
+  featured?: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProductVariant {
+  size?: string;
+  color?: string;
+  colorCode?: string;
+  sku?: string;
+  stock?: number;
+  price?: number;
+}
+
+export interface Brand {
+  _id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  logo?: string;
+  website?: string;
+  country?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ProductPayload = {
+  title: string;
+  brand: string;
+  description: string;
+  price: number;
+  cover: string;
+  category: string;
+  subcategory?: string;
+  stock: number;
+  sku?: string;
+  material?: string;
+  variants?: ProductVariant[];
+  dimensions?: {
+    length?: number;
+    width?: number;
+    height?: number;
+  };
+  weight?: number;
+  featured?: boolean;
+};
+
+export type BrandPayload = {
+  name: string;
+  slug: string;
+  description?: string;
+  logo?: string;
+  website?: string;
+  country?: string;
+};

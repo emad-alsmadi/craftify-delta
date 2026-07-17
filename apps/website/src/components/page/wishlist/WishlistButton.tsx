@@ -9,13 +9,13 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/Toast';
 
 interface WishlistButtonProps {
-  templateId: string;
+  productId: string;
   className?: string;
   variant?: 'icon' | 'button';
 }
 
 export function WishlistButton({
-  templateId,
+  productId,
   className = '',
   variant = 'icon',
 }: WishlistButtonProps) {
@@ -23,7 +23,7 @@ export function WishlistButton({
   const { toast } = useToast();
   const isAuthenticated = !!getAuthToken();
   const { data: checkData, isLoading: checkLoading } = useCheckWishlist(
-    isAuthenticated ? templateId : undefined,
+    isAuthenticated ? productId : undefined,
   );
   const addToWishlist = useAddToWishlistMutation();
   const removeFromWishlist = useRemoveFromWishlistMutation();
@@ -36,7 +36,7 @@ export function WishlistButton({
     e.stopPropagation();
 
     if (!isAuthenticated) {
-      toast('Please sign in to save templates to your wishlist', {
+      toast('Please sign in to save products to your wishlist', {
         variant: 'error',
       });
       router.push('/auth/login');
@@ -49,10 +49,10 @@ export function WishlistButton({
 
     try {
       if (isWishlisted) {
-        await removeFromWishlist.mutateAsync(templateId);
+        await removeFromWishlist.mutateAsync(productId);
         toast('Removed from wishlist', { variant: 'success' });
       } else {
-        await addToWishlist.mutateAsync(templateId);
+        await addToWishlist.mutateAsync(productId);
         toast('Added to wishlist', { variant: 'success' });
       }
     } catch (error) {
