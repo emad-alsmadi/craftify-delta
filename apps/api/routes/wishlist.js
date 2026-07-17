@@ -10,9 +10,9 @@ const {
 } = require('../controllers/wishlist.controller');
 
 // All wishlist routes require authentication
-router.post('/wishlist/:templateId', verfiyToken, addToWishlist);
-router.delete('/wishlist/:templateId', verfiyToken, removeFromWishlist);
+router.post('/wishlist/:productId', verfiyToken, addToWishlist);
+router.delete('/wishlist/:productId', verfiyToken, removeFromWishlist);
 router.get('/wishlist/my', verfiyToken, getMyWishlist);
-router.get('/wishlist/check/:templateId', verfiyToken, checkWishlist);
+router.get('/wishlist/check/:productId', verfiyToken, checkWishlist);
 
 module.exports = router;
