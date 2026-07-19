@@ -3,7 +3,8 @@ import { useState } from 'react';
 import {
   LayoutDashboard,
   Users,
-  FileText,
+  Package,
+  Tag,
   ShoppingCart,
   Settings,
   LogOut,
@@ -15,7 +16,8 @@ import { useTheme } from '../hooks/useTheme';
 const sidebarItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
   { icon: Users, label: 'Users', path: '/users' },
-  { icon: FileText, label: 'Templates', path: '/templates' },
+  { icon: Package, label: 'Products', path: '/products' },
+  { icon: Tag, label: 'Brands', path: '/brands' },
   { icon: ShoppingCart, label: 'Orders', path: '/orders' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];
@@ -35,7 +37,7 @@ export default function DashboardLayout() {
       >
         <div className='p-4'>
           <h1 className='text-xl font-bold text-gray-900 dark:text-white'>
-            {isSidebarOpen ? 'Craftify' : 'C'}
+            {isSidebarOpen ? 'TrendVault' : 'TV'}
           </h1>
         </div>
 
