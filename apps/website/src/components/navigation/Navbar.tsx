@@ -292,16 +292,6 @@ export function Navbar() {
 
                     <DropdownMenu.Item asChild>
                       <Link
-                        href='/licenses'
-                        className='flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors'
-                      >
-                        <FileText className='h-4 w-4' />
-                        Licenses
-                      </Link>
-                    </DropdownMenu.Item>
-
-                    <DropdownMenu.Item asChild>
-                      <Link
                         href='/terms'
                         className='flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors'
                       >

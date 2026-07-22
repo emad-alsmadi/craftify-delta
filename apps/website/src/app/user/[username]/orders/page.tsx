@@ -14,6 +14,9 @@ import {
   getUserFacingErrorMessage,
   logErrorForDev,
 } from '@/lib/userFacingError';
+import { getAuthToken } from '@/lib/authCookies';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 function formatDate(value: string) {
   try {
@@ -89,8 +92,20 @@ function statusClass(status: string) {
 }
 
 export default function UserOrdersPage() {
+  const router = useRouter();
+  const isAuthenticated = !!getAuthToken();
   const q = useMyOrders();
   const orders = q.data || [];
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/auth/login');
+    }
+  }, [isAuthenticated, router]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   if (q.isLoading) {
     return (

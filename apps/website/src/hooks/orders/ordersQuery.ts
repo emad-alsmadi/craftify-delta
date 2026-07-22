@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query';
 import { ordersApi, type OrderCheckoutPayload } from '@/lib/api';
 import type { Order } from '@/types';
+import { getAuthToken } from '@/lib/authCookies';
 
 export const ORDERS_MY_KEY = ['orders', 'my'] as const;
 
@@ -27,6 +28,8 @@ export function useCreateOrderMutation() {
 }
 
 export function useMyOrders() {
+  const isAuthenticated = typeof window !== 'undefined' && !!getAuthToken();
+
   return useQuery<Order[]>({
     queryKey: ORDERS_MY_KEY,
     queryFn: async () => {
@@ -34,6 +37,7 @@ export function useMyOrders() {
     },
     staleTime: 30_000,
     retry: 1,
+    enabled: isAuthenticated,
     placeholderData: keepPreviousData,
   });
 }
